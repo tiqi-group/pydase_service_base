@@ -1,0 +1,2 @@
+# ICON service base
+This repository contains the code that is common to all ICON services. It includes both backend (python) and frontend (js, ts) files and can be installed using both `poetry` and `npm`, respectively.
