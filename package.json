@@ -1,0 +1,17 @@
+{
+  "name": "@icon-service/icon_service_base",
+  "version": "0.1.0",
+  "description": "Repository storing the code that is common to all icon services.",
+  "author": "Mose Müller <mosmuell@ethz.ch>",
+  "license": "MIT",
+  "exports": {
+    ".": "./frontend"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git"
+  }
+}
