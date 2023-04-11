@@ -4,6 +4,9 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
+# TODO: we are not using all possible severity levels from loguru here (see
+# https://loguru.readthedocs.io/en/stable/api/logger.html). Either add them to this enum
+# or prevent people from using the other severity levels or tell them not to use them.
 class LogBroadcastMessageLevel(Enum):
     # low level messages that help tracking down issues
     DEBUG = "DEBUG"

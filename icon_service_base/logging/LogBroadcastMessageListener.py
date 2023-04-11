@@ -2,8 +2,6 @@ from abc import abstractmethod
 from uuid import uuid4
 
 from kombu import Connection, Consumer, Exchange, Message, Queue
-from loguru import logger
-
 from settings import amqp_settings
 
 
