@@ -9,14 +9,14 @@ ICON Service Base is a git repository that contains code shared among all Icon s
 Make sure you have Python 3.10 or later installed on your system. The dependencies of this package are handled with [`poetry`](https://python-poetry.org/docs/#installation). You can install the `icon_service_base` like so:
 
 ```bash
-poetry add https://gitlab.phys.ethz.ch/tiqi-projects/qchub/icon-services/icon_service_base
+poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git
 ```
 
 ### TypeScript frontend
 Make sure you have Node.js and npm or yarn installed on your system. You can install `@icon-service/icon_service_base` like so:
 
 ```bash
-npm install https://gitlab.phys.ethz.ch/tiqi-projects/qchub/icon-services/icon_service_base
+npm install git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git
 ```
 
 ## Usage
