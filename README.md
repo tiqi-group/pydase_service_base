@@ -32,3 +32,7 @@ export { ApiError } from "@icon-service/icon_service_base";
 export { CancelablePromise, CancelError } from '@icon-service/icon_service_base';
 export type { OpenAPIConfig } from '@icon-service/icon_service_base';
 ```
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
