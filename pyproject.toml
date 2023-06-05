@@ -12,6 +12,9 @@ python = ">=3.10,<3.11"
 loguru = "^0.7.0"
 pydantic = "^1.10.7"
 kombu = "^5.2.4"
+influxdb-client = "^1.36.1"
+python-dotenv = "^1.0.0"
+sqlmodel = "^0.0.8"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,6 +28,18 @@ flake8-comprehensions = "^3.11.1"
 flake8-pep585 = "^0.1.7"
 flake8-pep604 = "^0.1.0"
 flake8-eradicate = "^1.4.0"
+
+[tool.pyright]
+include = ["icon_service_base"]
+exclude = ["**/node_modules",
+    "**/__pycache__",
+    "documentation",
+]
+venvPath = "."
+venv = ".venv"
+pythonPlatform = "Linux"
+typeCheckingMode = "basic"
+reportUnknownMemberType = true
 
 [tool.black]
 line-length = 88
@@ -45,6 +60,13 @@ exclude = '''
 [tool.isort]
 profile = "black"
 
+[tool.mypy]
+show_error_codes = true
+disallow_untyped_defs = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+ignore_missing_imports = false
 
 [build-system]
 requires = ["poetry-core"]
