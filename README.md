@@ -6,15 +6,15 @@ ICON Service Base is a git repository that contains code shared among all Icon s
 
 ### Database Module
 
-The Database module provides a robust and scalable solution for interacting with our PostgreSQL and InfluxDB databases.
+The Database module provides a robust and scalable solution for interacting with our PostgreSQL and InfluxDB databases. Both connections are managed using credentials provided through environment variables.
 
 #### PostgreSQL
 
-The PostgreSQL section includes a class for managing PostgreSQL database sessions (`PostgresDatabaseSession`). It provides a Pythonic interface to the SQL language using the `sqlmodel` library, and includes features for managing transactions and handling errors.
+The PostgreSQL submodule includes a class for managing PostgreSQL database sessions (`PostgresDatabaseSession`). It provides a Pythonic interface to the SQL language using the `sqlmodel` library, and includes features for managing transactions and handling errors.
 
 #### InfluxDB
 
-The InfluxDB section provides a class (`InfluxDBConnection`) to manage connections to an InfluxDB server. This connection is established using credentials provided through environment variables. The class serves as a context manager to handle these connections, automatically opening and closing the connection when needed. It provides functionalities for writing data points to a bucket and creating new buckets.
+The InfluxDB submodule provides a class (`InfluxDBConnection`) to manage connections to an InfluxDB server. This class serves as a context manager to handle these connections, automatically opening and closing the connection when needed. It provides functionalities for writing data points to a bucket and creating new buckets.
 
 ## Installation
 
