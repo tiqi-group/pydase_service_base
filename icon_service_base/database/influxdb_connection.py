@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from types import TracebackType
 
-from dotenv import dotenv_values
 from influxdb_client import (  # type: ignore
     Bucket,
     BucketRetentionRules,
@@ -14,13 +13,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS  # type: ignore
 from influxdb_client.rest import ApiException  # type: ignore
 from loguru import logger
 
-# Load the environment variables from the .env file
-env_vars = dotenv_values()
-
-# Access the individual environment variables
-INFLUXDB_V2_URL = str(env_vars.get("INFLUXDB_V2_URL"))
-INFLUXDB_V2_ORG = env_vars.get("INFLUXDB_V2_ORG")
-INFLUXDB_V2_TOKEN = env_vars.get("INFLUXDB_V2_TOKEN")
+from icon_service_base.database.config import InfluxDBConfig
 
 
 class InfluxDBConnection:
@@ -55,9 +48,9 @@ class InfluxDBConnection:
     """
 
     def __init__(self) -> None:
-        self.url = INFLUXDB_V2_URL
-        self.token = INFLUXDB_V2_TOKEN
-        self.org = INFLUXDB_V2_ORG
+        self.url = InfluxDBConfig().url
+        self.token = str(InfluxDBConfig().token)
+        self.org = InfluxDBConfig().org
         self.client: InfluxDBClient
         self.write_api: WriteApi
         self.buckets_api: BucketsApi | None = None

@@ -7,18 +7,9 @@ from types import TracebackType
 from typing import Any
 
 from dateutil.parser import ParserError, parse  # type: ignore
-from dotenv import dotenv_values
 from sqlmodel import Session, SQLModel, create_engine
 
-# Load the environment variables from the .env file
-env_vars = dotenv_values()
-
-# Access the individual environment variables
-POSTGRESQL_USER = env_vars.get("POSTGRESQL_USER")
-POSTGRESQL_PASSWORD = env_vars.get("POSTGRESQL_PASSWORD")
-POSTGRESQL_HOST = env_vars.get("POSTGRESQL_HOST")
-POSTGRESQL_PORT = env_vars.get("POSTGRESQL_PORT")
-POSTGRESQL_DATABASE = env_vars.get("POSTGRESQL_DATABASE")
+from icon_service_base.database.config import PostgreSQLConfig
 
 
 def json_loads_or_return_input(input_string: str) -> dict[str, Any] | Any:
@@ -98,18 +89,6 @@ def deserialize_json_dict(json_string: str) -> Any:
     return result
 
 
-# the docs state that
-# "You should normally have a single engine object for your whole application
-# and re-use it everywhere."
-database_engine = create_engine(
-    f"postgresql://{POSTGRESQL_USER}:{POSTGRESQL_PASSWORD}@{POSTGRESQL_HOST}:"
-    f"{POSTGRESQL_PORT}/{POSTGRESQL_DATABASE}",
-    echo=False,
-    json_serializer=json_dumps,
-    json_deserializer=deserialize_json_dict,
-)
-
-
 class PostgresDatabaseSession(Session):
     """A class to represent a session with the PostgreSQL database.
 
@@ -149,7 +128,16 @@ class PostgresDatabaseSession(Session):
     def __init__(self) -> None:
         """Initializes a new session bound to the database engine."""
 
-        super().__init__(bind=database_engine)
+        super().__init__(
+            bind=create_engine(
+                f"postgresql://{PostgreSQLConfig().user}:{PostgreSQLConfig().password}@"
+                f"{PostgreSQLConfig().host.host}:{PostgreSQLConfig().port}/"
+                f"{PostgreSQLConfig().database}",
+                echo=False,
+                json_serializer=json_dumps,
+                json_deserializer=deserialize_json_dict,
+            )
+        )
 
     def __enter__(self) -> PostgresDatabaseSession:
         """Begins the runtime context related to the database session."""

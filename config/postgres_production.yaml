@@ -1,0 +1,3 @@
+database: qchub
+host: avalon.qchub.ch
+port: 5432
