@@ -5,15 +5,15 @@ description = "Repository storing the code that is common to all icon services."
 authors = ["Mose Mueller <mosmuell@ethz.ch>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "icon_service_base"}]
+packages = [{ include = "icon_service_base" }]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = "^3.10"
 loguru = "^0.7.0"
 kombu = "^5.2.4"
 influxdb-client = "^1.36.1"
 sqlmodel = "^0.0.8"
-confz = "^1.8.1"
+confz = "^2.0.0"
 psycopg2-binary = "^2.9.6"
 
 
@@ -31,10 +31,7 @@ flake8-eradicate = "^1.4.0"
 
 [tool.pyright]
 include = ["icon_service_base"]
-exclude = ["**/node_modules",
-    "**/__pycache__",
-    "documentation",
-]
+exclude = ["**/node_modules", "**/__pycache__", "documentation"]
 venvPath = "."
 venv = ".venv"
 pythonPlatform = "Linux"
