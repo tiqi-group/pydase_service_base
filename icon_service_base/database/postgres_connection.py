@@ -3,13 +3,16 @@ from __future__ import annotations
 import datetime
 import json
 import re
+from pathlib import Path
 from types import TracebackType
 from typing import Any
 
+from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
+from loguru import logger
 from sqlmodel import Session, SQLModel, create_engine
 
-from icon_service_base.database.config import PostgreSQLConfig
+from icon_service_base.database.config import OperationMode, PostgreSQLConfig
 
 
 def json_loads_or_return_input(input_string: str) -> dict[str, Any] | Any:
@@ -125,14 +128,19 @@ class PostgresDatabaseSession(Session):
         ```
     """
 
-    def __init__(self) -> None:
+    def __init__(self, config_folder: Path | str) -> None:
         """Initializes a new session bound to the database engine."""
+        self._config = PostgreSQLConfig(
+            config_sources=FileSource(
+                Path(config_folder) / f"postgres_{OperationMode().environment}.yaml"
+            )
+        )
 
         super().__init__(
             bind=create_engine(
-                f"postgresql://{PostgreSQLConfig().user}:{PostgreSQLConfig().password}@"
-                f"{PostgreSQLConfig().host.host}:{PostgreSQLConfig().port}/"
-                f"{PostgreSQLConfig().database}",
+                f"postgresql://{self._config.user}:{self._config.password}@"
+                f"{self._config.host.host}:{self._config.port}/"
+                f"{self._config.database}",
                 echo=False,
                 json_serializer=json_dumps,
                 json_deserializer=deserialize_json_dict,

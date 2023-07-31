@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from pathlib import Path
 from types import TracebackType
 
+from confz import FileSource
 from influxdb_client import (  # type: ignore
     Bucket,
     BucketRetentionRules,
@@ -47,10 +49,13 @@ class InfluxDBConnection:
     ```
     """
 
-    def __init__(self) -> None:
-        self.url = InfluxDBConfig().url
-        self.token = str(InfluxDBConfig().token)
-        self.org = InfluxDBConfig().org
+    def __init__(self, config_folder: Path | str) -> None:
+        self._config = InfluxDBConfig(
+            config_sources=FileSource(Path(config_folder) / "influxdb_config.yaml")
+        )
+        self.url = self._config.url
+        self.token = str(self._config.token)
+        self.org = self._config.org
         self.client: InfluxDBClient
         self.write_api: WriteApi
         self.buckets_api: BucketsApi | None = None
