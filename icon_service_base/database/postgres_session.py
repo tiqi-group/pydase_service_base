@@ -13,6 +13,7 @@ from loguru import logger
 from sqlmodel import Session, SQLModel, create_engine
 
 from icon_service_base.database.config import OperationMode, PostgreSQLConfig
+from icon_service_base.database.create_config import create_config
 
 
 def json_loads_or_return_input(input_string: str) -> dict[str, Any] | Any:
@@ -132,21 +133,11 @@ class PostgresDatabaseSession(Session):
 
     def __init__(self, config_folder: Optional[Path | str] = None) -> None:
         """Initializes a new session bound to the database engine."""
-        config_folder = config_folder or getattr(self, "conf_folder", None)
-        if PostgreSQLConfig.CONFIG_SOURCES is not None or config_folder is not None:
-            config_sources = None
-            if config_folder is not None:
-                config_sources = FileSource(
-                    Path(config_folder) / f"postgres_{OperationMode().environment}.yaml"
-                )
-            self._config = PostgreSQLConfig(config_sources=config_sources)
-        else:
-            logger.error(
-                "No config folder given. Please provide a config folder either by "
-                "passing it to the constructor or by setting the 'conf_folder' "
-                "attribute."
-            )
-            return
+        self._config = create_config(
+            PostgreSQLConfig,
+            config_folder=config_folder,
+            config_file=f"postgres_{OperationMode().environment}.yaml",
+        )
 
         super().__init__(
             bind=create_engine(

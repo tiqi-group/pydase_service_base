@@ -4,19 +4,19 @@ from pathlib import Path
 from types import TracebackType
 from typing import Optional
 
-from confz import FileSource
-from influxdb_client import (  # type: ignore
+from influxdb_client import (
     Bucket,
     BucketRetentionRules,
     BucketsApi,
     InfluxDBClient,
     WriteApi,
 )
-from influxdb_client.client.write_api import SYNCHRONOUS  # type: ignore
-from influxdb_client.rest import ApiException  # type: ignore
+from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client.rest import ApiException
 from loguru import logger
 
 from icon_service_base.database.config import InfluxDBConfig
+from icon_service_base.database.create_config import create_config
 
 
 class InfluxDBSession:
@@ -53,21 +53,11 @@ class InfluxDBSession:
     conf_folder: Path | str
 
     def __init__(self, config_folder: Optional[Path | str] = None) -> None:
-        config_folder = config_folder or getattr(self, "conf_folder", None)
-        if InfluxDBConfig.CONFIG_SOURCES is not None or config_folder is not None:
-            config_sources = None
-            if config_folder is not None:
-                config_sources = FileSource(
-                    Path(config_folder) / "influxdb_config.yaml"
-                )
-            self._config = InfluxDBConfig(config_sources=config_sources)
-        else:
-            logger.error(
-                "No config folder given. Please provide a config folder either by "
-                "passing it to the constructor or by setting the 'conf_folder' "
-                "attribute."
-            )
-            return
+        self._config = create_config(
+            InfluxDBConfig,
+            config_folder=config_folder,
+            config_file="influxdb_config.yaml",
+        )
 
         self.url = self._config.url
         self.token = str(self._config.token)
