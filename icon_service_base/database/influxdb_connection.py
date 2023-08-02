@@ -18,7 +18,7 @@ from loguru import logger
 from icon_service_base.database.config import InfluxDBConfig
 
 
-class InfluxDBConnection:
+class InfluxDBSession:
     """
     The `InfluxDBConnection` class serves as a context manager for a connection
     to an InfluxDB server. This connection is established using credentials
