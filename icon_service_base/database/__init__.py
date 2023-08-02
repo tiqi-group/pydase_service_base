@@ -1,4 +1,4 @@
-from .influxdb_connection import InfluxDBSession
-from .postgres_connection import PostgresDatabaseSession
+from .influxdb_session import InfluxDBSession
+from .postgres_session import PostgresDatabaseSession
 
 __all__ = ["InfluxDBSession", "PostgresDatabaseSession"]

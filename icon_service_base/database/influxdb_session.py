@@ -27,7 +27,7 @@ class InfluxDBSession:
 
     Example usage:
     ```
-    with InfluxDBConnection() as influx_client:
+    with InfluxDBSession() as influx_client:
         # Creating a bucket
         influx_client.create_bucket(
             bucket_name='my_new_bucket', description='This is a new bucket'
