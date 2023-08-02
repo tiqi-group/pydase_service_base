@@ -60,7 +60,7 @@ class InfluxDBSession:
         )
 
         self.url = self._config.url
-        self.token = str(self._config.token)
+        self.token = self._config.token.get_secret_value()
         self.org = self._config.org
         self.client: InfluxDBClient
         self.write_api: WriteApi
