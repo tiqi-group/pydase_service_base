@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from types import TracebackType
+from typing import Optional
 
 from confz import FileSource
 from influxdb_client import (  # type: ignore
@@ -49,10 +50,25 @@ class InfluxDBSession:
     ```
     """
 
-    def __init__(self, config_folder: Path | str) -> None:
-        self._config = InfluxDBConfig(
-            config_sources=FileSource(Path(config_folder) / "influxdb_config.yaml")
-        )
+    conf_folder: Path | str
+
+    def __init__(self, config_folder: Optional[Path | str] = None) -> None:
+        config_folder = config_folder or getattr(self, "conf_folder", None)
+        if InfluxDBConfig.CONFIG_SOURCES is not None or config_folder is not None:
+            config_sources = None
+            if config_folder is not None:
+                config_sources = FileSource(
+                    Path(config_folder) / "influxdb_config.yaml"
+                )
+            self._config = InfluxDBConfig(config_sources=config_sources)
+        else:
+            logger.error(
+                "No config folder given. Please provide a config folder either by "
+                "passing it to the constructor or by setting the 'conf_folder' "
+                "attribute."
+            )
+            return
+
         self.url = self._config.url
         self.token = str(self._config.token)
         self.org = self._config.org
@@ -60,7 +76,7 @@ class InfluxDBSession:
         self.write_api: WriteApi
         self.buckets_api: BucketsApi | None = None
 
-    def __enter__(self) -> InfluxDBConnection:
+    def __enter__(self) -> InfluxDBSession:
         self.client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)  # type: ignore
         return self

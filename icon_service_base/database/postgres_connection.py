@@ -5,7 +5,7 @@ import json
 import re
 from pathlib import Path
 from types import TracebackType
-from typing import Any
+from typing import Any, Optional
 
 from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
@@ -128,13 +128,25 @@ class PostgresDatabaseSession(Session):
         ```
     """
 
-    def __init__(self, config_folder: Path | str) -> None:
+    conf_folder: Path | str
+
+    def __init__(self, config_folder: Optional[Path | str] = None) -> None:
         """Initializes a new session bound to the database engine."""
-        self._config = PostgreSQLConfig(
-            config_sources=FileSource(
-                Path(config_folder) / f"postgres_{OperationMode().environment}.yaml"
+        config_folder = config_folder or getattr(self, "conf_folder", None)
+        if PostgreSQLConfig.CONFIG_SOURCES is not None or config_folder is not None:
+            config_sources = None
+            if config_folder is not None:
+                config_sources = FileSource(
+                    Path(config_folder) / f"postgres_{OperationMode().environment}.yaml"
+                )
+            self._config = PostgreSQLConfig(config_sources=config_sources)
+        else:
+            logger.error(
+                "No config folder given. Please provide a config folder either by "
+                "passing it to the constructor or by setting the 'conf_folder' "
+                "attribute."
             )
-        )
+            return
 
         super().__init__(
             bind=create_engine(
