@@ -71,7 +71,7 @@ with InfluxDBSession() as influx_client:
         },
         "time": "2023-06-05T00:00:00Z",  # Replace with your timestamp
     }
-    influx_client.write_api.write(
+    influx_client.write(
         bucket='my_new_bucket', record=record
     )
 ```
