@@ -89,28 +89,26 @@ class InfluxDBSession:
     def write(
         self,
         bucket: str,
-        org: Optional[str] = None,
         record: Union[  # type: ignore
             str,
-            Iterable["str"],
+            Iterable[str],
             Point,
-            Iterable["Point"],
-            dict,
-            Iterable["dict"],
+            Iterable[Point],
+            dict[str, Any],
+            Iterable[dict[str, Any]],
             bytes,
-            Iterable["bytes"],
-            Observable,
+            Iterable[bytes],
+            Observable[Any],
             NamedTuple,
-            Iterable["NamedTuple"],
-            "dataclass",  # type: ignore
-            Iterable["dataclass"],  # type: ignore
-        ] = None,
+            Iterable[NamedTuple],
+        ],
+        org: Optional[str] = None,
         write_precision: WritePrecision = DEFAULT_WRITE_PRECISION,  # type: ignore
         **kwargs: Any,
     ) -> Any:
         self._write_api.write(  # type: ignore
             bucket=bucket,
-            org=org,
+            org=org if org is not None else self.org,
             record=record,
             write_precision=write_precision,  # type: ignore
             **kwargs,
