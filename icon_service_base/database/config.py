@@ -39,7 +39,6 @@ CONFIG_DIR: Optional[Path] = None
 # package name, check for the "database_config" directory inside the parent directory of
 # the found directory.
 if VENV_DIR is not None and VENV_DIR.parent.name != package_name:
-    logger.debug(VENV_DIR.parent.name)
     CONFIG_DIR = VENV_DIR.parent / "database_config"
     if not CONFIG_DIR.exists():
         CONFIG_DIR = None
