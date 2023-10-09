@@ -10,12 +10,12 @@ packages = [{ include = "icon_service_base" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 loguru = "^0.7.0"
-kombu = "^5.2.4"
 influxdb-client = "^1.36.1"
 sqlmodel = "^0.0.8"
 confz = "^2.0.0"
 psycopg2-binary = "^2.9.6"
-
+pydase = "0.1.0"
+tiqi-rpc = {git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
