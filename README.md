@@ -1,10 +1,10 @@
 # ICON Service Base
 
-ICON Service Base is a shared code repository for Icon services in a service-based architecture. It is written in Python and provides functionality for interacting with PostgreSQL and InfluxDB v2 databases.
+ICON Service Base is a shared code repository for Icon services in a service-based architecture. Written in Python, it provides the essential functionality for interacting with PostgreSQL and InfluxDB v2 databases. In addition, it offers the `Ionizer Interface`, enabling seamless integration between `pydase` applications and the Ionizer system.
 
 ## Installation
 
-Make sure you have Python 3.10 or later installed on your system. The dependencies of this package are handled with [`poetry`](https://python-poetry.org/docs/#installation). You can install the `icon_service_base` like so:
+Ensure you have Python 3.10 or later installed on your system. Dependencies of this package are managed with [`poetry`](https://python-poetry.org/docs/#installation). Install the `icon_service_base` as follows:
 
 ```bash
 poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git
@@ -12,11 +12,9 @@ poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/i
 
 ## Configuration
 
-The database connections are managed using configurations provided through environment variables or a configuration file.
+Database connections rely on configurations provided either through environment variables or a specific configuration file. The package anticipates a `database_config` folder in the root directory of any module using this package. This folder should house the configuration files for the databases. Override the `database_config` folder's location by passing a different path to the database classes' constructor.
 
-The package expects a `database_config` folder in the root directory of any module installing this package, which should contain the configuration files for the databases. The location of the `database_config` folder can be overridden by passing a different path to the constructor of the database classes.
-
-The `database_config` folder should have the following structure:
+Structure of the `database_config` folder:
 
 ```
 database_config
@@ -25,10 +23,9 @@ database_config
 └── postgres_production.yaml
 ```
 
-Here is an example of the contents of the configuration files:
+Example content for the configuration files:
 
 `influxdb_config.yaml`:
-
 ```yaml
 url: https://database-url.ch
 org: your-org
@@ -36,7 +33,6 @@ token: <influxdb-token>
 ```
 
 `postgres_development.yaml` / `postgres_production.yaml`:
-
 ```yaml
 database: ...
 host: https://database-url.ch
@@ -49,7 +45,7 @@ user: ...
 
 ### InfluxDBSession
 
-You can use the `InfluxDBSession` class to interact with an InfluxDB server. **Please note that this class only supports InfluxDB v2**.
+Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2**.
 
 ```python
 from icon_service_base.database import InfluxDBSession
@@ -78,7 +74,7 @@ with InfluxDBSession() as influx_client:
 
 ### PostgresDatabaseSession
 
-The `PostgresDatabaseSession` class can be used to interact with a PostgreSQL database. Here's an example of how to use it:
+The `PostgresDatabaseSession` class allows interactions with a PostgreSQL database.
 
 ```python
 from icon_service_base.database import PostgresDatabaseSession
@@ -98,6 +94,40 @@ with PostgresDatabaseSession() as session:
     session.commit()
 ```
 
+### Ionizer Interface
+
+The `IonizerServer` provides an interface to seamlessly integrate `pydase` applications with Ionizer.
+
+To deploy `IonizerServer` with your service:
+
+```python
+from icon_service_base.ionizer_interface import IonizerServer
+
+class YourServiceClass:
+    # your implementation...
+
+
+if __name__ == "__main__":
+    # Instantiate your service
+    service = YourServiceClass()
+
+    # Start the main pydase server with IonizerServer as an additional server
+    Server(
+        service,
+        additional_servers=[
+            {
+                "server": IonizerServer,
+                "port": 8002,
+                "kwargs": {},
+            }
+        ],
+    ).run()
+```
+
+This integration ensures that your primary `pydase` server and `YourServiceClass` service are set up. It also incorporates the `IonizerServer` on port `8002`.
+
+For more details on the `IonizerServer`, refer to the [official documentation](https://pydase.readthedocs.io/en/latest/) or get in touch with the maintainers.
+
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project uses the MIT License. Consult the [LICENSE](./LICENSE) file for more information.
