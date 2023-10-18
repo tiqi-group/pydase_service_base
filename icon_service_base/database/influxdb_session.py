@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,11 +19,12 @@ from influxdb_client import (
 from influxdb_client.client.write.point import DEFAULT_WRITE_PRECISION
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.rest import ApiException
-from loguru import logger
 from reactivex import Observable
 
 from icon_service_base.database.config import InfluxDBConfig
 from icon_service_base.database.create_config import create_config
+
+logger = logging.getLogger(__name__)
 
 
 class InfluxDBSession:

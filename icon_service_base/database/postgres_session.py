@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import json
+import logging
 import re
 from pathlib import Path
 from types import TracebackType
@@ -9,11 +10,12 @@ from typing import Any, Optional
 
 from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
-from loguru import logger
 from sqlmodel import Session, SQLModel, create_engine
 
 from icon_service_base.database.config import OperationMode, PostgreSQLConfig
 from icon_service_base.database.create_config import create_config
+
+logger = logging.getLogger(__name__)
 
 
 def json_loads_or_return_input(input_string: str) -> dict[str, Any] | Any:

@@ -1,8 +1,11 @@
+import logging
 from pathlib import Path
 from typing import Optional, TypeVar
 
 from confz import BaseConfig, FileSource
 from loguru import logger
+
+logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound=BaseConfig)
 

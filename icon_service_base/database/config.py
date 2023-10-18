@@ -2,7 +2,6 @@ from pathlib import Path
 from typing import Literal, Optional
 
 from confz import BaseConfig, EnvSource, FileSource
-from loguru import logger
 from pydantic import AnyUrl, SecretStr
 
 # Retrieve the name of the current package
