@@ -127,8 +127,7 @@ class InfluxDBSession:
     ) -> None:
         """
         Create a bucket in the InfluxDB instance. This function wraps the create_bucket
-        from `influxdb_client` in a try-catch block and logs potential errors with
-        loguru.
+        from `influxdb_client` in a try-catch block and logs potential errors.
 
         Args:
             bucket (Bucket | PostBucketRequest, optional): Bucket instance to be
