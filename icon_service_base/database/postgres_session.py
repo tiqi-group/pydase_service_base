@@ -6,11 +6,15 @@ import logging
 import re
 from typing import TYPE_CHECKING, Any
 
+from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
 from sqlmodel import Session, SQLModel, create_engine
 
-from icon_service_base.database.config import OperationMode, PostgreSQLConfig
-from icon_service_base.database.create_config import create_config
+from icon_service_base.database.config import (
+    OperationMode,
+    PostgreSQLConfig,
+    ServiceConfig,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -134,12 +138,13 @@ class PostgresDatabaseSession(Session):
 
     conf_folder: Path | str
 
-    def __init__(self, config_folder: Path | str | None = None) -> None:
+    def __init__(self) -> None:
         """Initializes a new session bound to the database engine."""
-        self._config = create_config(
-            PostgreSQLConfig,
-            config_folder=config_folder,
-            config_file=f"postgres_{OperationMode().environment}.yaml",
+        self._config = PostgreSQLConfig(
+            config_sources=FileSource(
+                ServiceConfig().database_config_dir
+                / f"postgres_{OperationMode().environment}.yaml"
+            )
         )
 
         super().__init__(

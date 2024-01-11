@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, NamedTuple
 
+from confz import FileSource
 from influxdb_client import (
     Bucket,
     BucketRetentionRules,
@@ -16,8 +17,7 @@ from influxdb_client.client.write.point import DEFAULT_WRITE_PRECISION
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.rest import ApiException
 
-from icon_service_base.database.config import InfluxDBConfig
-from icon_service_base.database.create_config import create_config
+from icon_service_base.database.config import InfluxDBConfig, ServiceConfig
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -63,11 +63,11 @@ class InfluxDBSession:
 
     conf_folder: Path | str
 
-    def __init__(self, config_folder: Path | str | None = None) -> None:
-        self._config = create_config(
-            InfluxDBConfig,
-            config_folder=config_folder,
-            config_file="influxdb_config.yaml",
+    def __init__(self) -> None:
+        self._config = InfluxDBConfig(
+            config_sources=FileSource(
+                ServiceConfig().database_config_dir / "influxdb_config.yaml"
+            )
         )
 
         self.url = self._config.url
