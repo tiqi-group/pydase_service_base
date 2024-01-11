@@ -7,6 +7,10 @@ license = "MIT"
 readme = "README.md"
 packages = [{ include = "icon_service_base" }]
 
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 influxdb-client = "^1.36.1"
@@ -14,56 +18,69 @@ sqlmodel = "^0.0.8"
 confz = "^2.0.0"
 psycopg2-binary = "^2.9.6"
 pydase = "*"
-tiqi-rpc = {git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git"}
+tiqi-rpc = { git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git" }
+
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
-mypy = "^1.1.1"
-isort = "^5.12.0"
-flake8 = "^5.0.4"
-flake8-use-fstring = "^1.4"
-flake8-functions = "^0.0.7"
-flake8-comprehensions = "^3.11.1"
-flake8-pep585 = "^0.1.7"
-flake8-pep604 = "^0.1.0"
-flake8-eradicate = "^1.4.0"
+mypy = "^1.4.1"
+pyright = "^1.1.323"
+ruff = "^0.1.5"
+
+[tool.ruff]
+target-version = "py310" # Always generate Python 3.10-compatible code
+select = [
+    "ASYNC", # flake8-async
+    "C4",    # flake8-comprehensions
+    "C901",  # mccabe complex-structure
+    "E",     # pycodestyle errors
+    "ERA",   # eradicate
+    "F",     # pyflakes
+    "FLY",   # flynt
+    "G",     # flake8-logging-format
+    "I",     # isort
+    "ICN",   # flake8-import-conventions
+    "INP",   # flake8-no-pep420
+    "ISC",   # flake8-implicit-str-concat
+    "N",     # pep8-naming
+    "NPY",   # NumPy-specific rules
+    "PERF",  # perflint
+    "PIE",   # flake8-pie
+    "PL",    # pylint
+    "PYI",   # flake8-pyi
+    "Q",     # flake8-quotes
+    "RET",   # flake8-return
+    "RUF",   # Ruff-specific rules
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "TCH",   # flake8-type-checking
+    "UP",    # pyupgrade
+    "YTT",   # flake8-2020
+    "W",     # pycodestyle warnings
+]
+ignore = [
+    "E203",     # whitespace-before-punctuation
+    "W292",     # missing-newline-at-end-of-file
+    "PERF203",  # try-except-in-loop
+]
+extend-exclude = [
+  "docs", "frontend"
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 7
+
 
 [tool.pyright]
 include = ["icon_service_base"]
-exclude = ["**/node_modules", "**/__pycache__", "documentation"]
-venvPath = "."
-venv = ".venv"
-pythonPlatform = "Linux"
 typeCheckingMode = "basic"
-reportUnknownMemberType = true
 
-[tool.black]
-line-length = 88
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.tox
-  | venv
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
-
-[tool.isort]
-profile = "black"
 
 [tool.mypy]
-show_error_codes = true
 disallow_untyped_defs = true
 disallow_untyped_calls = true
 disallow_incomplete_defs = true
+disallow_any_generics = true
 check_untyped_defs = true
 ignore_missing_imports = false
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
