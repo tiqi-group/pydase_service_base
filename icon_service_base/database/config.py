@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 from confz import BaseConfig, EnvSource, FileSource
 from pydantic import AnyUrl, SecretStr
@@ -32,7 +32,7 @@ VENV_DIR = find_dir_upwards(Path(__file__).resolve(), [".venv", "venv"])
 # Look for "deps" directory starting from the current file's directory.
 DEPS_DIR = find_dir_upwards(Path(__file__).resolve(), ["deps"])
 
-CONFIG_DIR: Optional[Path] = None
+CONFIG_DIR: Path | None = None
 
 # If a ".venv" or "venv" directory was found and its parent's name is not the current
 # package name, check for the "database_config" directory inside the parent directory of
@@ -51,7 +51,7 @@ elif DEPS_DIR is not None:
 
 
 class OperationMode(BaseConfig):  # type: ignore
-    environment: Literal["development"] | Literal["production"] = "development"
+    environment: Literal["development", "production"] = "development"
 
     CONFIG_SOURCES = EnvSource(allow=["ENVIRONMENT"])
 

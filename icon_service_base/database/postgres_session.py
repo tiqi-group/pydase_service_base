@@ -4,16 +4,17 @@ import datetime
 import json
 import logging
 import re
-from pathlib import Path
-from types import TracebackType
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any
 
-from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
 from sqlmodel import Session, SQLModel, create_engine
 
 from icon_service_base.database.config import OperationMode, PostgreSQLConfig
 from icon_service_base.database.create_config import create_config
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from types import TracebackType
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ def is_datetime_format(input_string: str) -> bool:
         return False
 
 
-def json_dumps(data: Any) -> str | list:
+def json_dumps(data: Any) -> str | list[Any]:
     """
     Serialize a Python object into a JSON-formatted string, with custom handling for
     datetime and list objects.
@@ -56,7 +57,7 @@ def json_dumps(data: Any) -> str | list:
     # 'Infinity' is an unallowed token in JSON, thus make it a string
     # https://stackoverflow.com/questions/48356938/store-infinity-in-postgres-json-via-django
     pattern = r"(-?Infinity)"
-    result: str | list
+    result: str | list[Any]
 
     if isinstance(data, str):
         if is_datetime_format(data):
@@ -133,7 +134,7 @@ class PostgresDatabaseSession(Session):
 
     conf_folder: Path | str
 
-    def __init__(self, config_folder: Optional[Path | str] = None) -> None:
+    def __init__(self, config_folder: Path | str | None = None) -> None:
         """Initializes a new session bound to the database engine."""
         self._config = create_config(
             PostgreSQLConfig,
