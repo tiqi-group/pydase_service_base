@@ -14,7 +14,7 @@ class OperationMode(BaseConfig):  # type: ignore
 class ServiceConfig(BaseConfig):  # type: ignore
     database_config_dir: Path = Path("database_config")
 
-    CONFIG_SOURCES = EnvSource(allow=["SERVICE_DATABASE_CONFIG_DIR"])
+    CONFIG_SOURCES = EnvSource(prefix="SERVICE_", allow_all=True)
 
 
 class PostgreSQLConfig(BaseConfig):  # type: ignore
@@ -24,16 +24,8 @@ class PostgreSQLConfig(BaseConfig):  # type: ignore
     user: str
     password: SecretStr
 
-    # if CONFIG_DIR:
-    #     CONFIG_SOURCES = FileSource(
-    #         CONFIG_DIR / f"postgres_{OperationMode().environment}.yaml"
-    #     )
-
 
 class InfluxDBConfig(BaseConfig):  # type: ignore
     url: AnyUrl
     org: str
     token: SecretStr
-
-    # if CONFIG_DIR:
-    #     CONFIG_SOURCES = FileSource(CONFIG_DIR / "influxdb_config.yaml")
