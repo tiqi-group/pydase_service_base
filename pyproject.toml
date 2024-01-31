@@ -18,7 +18,12 @@ sqlmodel = "^0.0.8"
 confz = "^2.0.0"
 psycopg2-binary = "^2.9.6"
 pydase = "*"
-tiqi-rpc = { git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git" }
+
+# optional dependencies
+tiqi-rpc = { git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git", optional=true }
+
+[tool.poetry.extras]
+ionizer = ["tiqi-rpc"]
 
 [tool.poetry.group.dev]
 optional = true
