@@ -1,11 +1,11 @@
 import inspect
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from pydase import DataService
 from pydase.components import NumberSlider
 from pydase.units import Quantity
-from pydase.utils.helpers import get_object_attr_from_path
+from pydase.utils.helpers import get_object_attr_from_path_list
 from pydase.version import __version__
 
 
@@ -27,9 +27,7 @@ class RPCInterface:
     async def info(self) -> dict:
         return self._info
 
-    async def get_props(self, name: Optional[str] = None) -> dict[str, Any]:
-        if name is None:
-            return self._service.serialize()
+    async def get_props(self) -> dict[str, Any]:
         return self._service.serialize()
 
     async def get_param(self, full_access_path: str) -> Any:
@@ -38,26 +36,27 @@ class RPCInterface:
         This method is called when Ionizer initilizes the Plugin or refreshes. The
         widgets need to store the full_access_path in their name attribute.
         """
-        param = get_object_attr_from_path(self._service, full_access_path.split("."))
+        param = get_object_attr_from_path_list(
+            self._service, full_access_path.split(".")
+        )
         if isinstance(param, NumberSlider):
             return param.value
-        elif isinstance(param, DataService):
+        if isinstance(param, DataService):
             return param.serialize()
-        elif inspect.ismethod(param):
+        if inspect.ismethod(param):
             # explicitly serialize any methods that will be returned
             full_access_path = param.__name__
             args = inspect.signature(param).parameters
             return f"{full_access_path}({', '.join(args)})"
-        elif isinstance(param, Enum):
+        if isinstance(param, Enum):
             return param.value
-        elif isinstance(param, Quantity):
+        if isinstance(param, Quantity):
             return param.m
-        else:
-            return param
+        return param
 
     async def set_param(self, full_access_path: str, value: Any) -> None:
         parent_path_list = full_access_path.split(".")[:-1]
-        parent_object = get_object_attr_from_path(self._service, parent_path_list)
+        parent_object = get_object_attr_from_path_list(self._service, parent_path_list)
         attr_name = full_access_path.split(".")[-1]
         # I don't want to trigger the execution of a property getter as this might take
         # a while when connecting to remote devices
@@ -80,7 +79,9 @@ class RPCInterface:
 
     async def remote_call(self, full_access_path: str, *args: Any) -> Any:
         full_access_path_list = full_access_path.split(".")
-        method_object = get_object_attr_from_path(self._service, full_access_path_list)
+        method_object = get_object_attr_from_path_list(
+            self._service, full_access_path_list
+        )
         return method_object(*args)
 
     async def emit(self, message: str) -> None:
