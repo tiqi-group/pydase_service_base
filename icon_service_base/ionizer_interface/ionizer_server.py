@@ -15,7 +15,9 @@ class IonizerServer:
         self, service: pydase.DataService, port: int, host: str, **kwargs: Any
     ) -> None:
         self.server = tiqi_rpc.Server(
-            RPCInterface(service, **kwargs), host=host, port=port  # type: ignore
+            RPCInterface(service, **kwargs),
+            host=host,
+            port=port,  # type: ignore
         )
 
         def notify_Ionizer(parent_path: str, attr_name: str, value: Any) -> None:
@@ -27,7 +29,7 @@ class IonizerServer:
             - value (Any): The value of the parameter.
             """
             parent_path_list = parent_path.split(".")[1:]  # without classname
-            name = ".".join(parent_path_list + [attr_name])
+            name = ".".join([*parent_path_list, attr_name])
             if isinstance(value, Enum):
                 value = value.value
             if isinstance(value, u.Quantity):
@@ -44,7 +46,7 @@ class IonizerServer:
             )
 
         service._callback_manager.add_notification_callback(notify_Ionizer)
-        self.server.install_signal_handlers = lambda: None
+        self.server.install_signal_handlers = lambda: None  # type: ignore
 
     async def serve(self) -> None:
         await self.server.serve()

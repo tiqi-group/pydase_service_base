@@ -9,7 +9,7 @@ from pydase.utils.helpers import get_object_attr_from_path
 from pydase.version import __version__
 
 
-class RPCInterface(object):
+class RPCInterface:
     """RPC interface to be passed to tiqi_rpc.Server to interface with Ionizer."""
 
     def __init__(
