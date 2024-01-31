@@ -10,6 +10,27 @@ Ensure you have Python 3.10 or later installed on your system. Dependencies of t
 poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git
 ```
 
+To utilize specific functionalities such as `IonizerServer`, `InfluxDBSession`, or `PostgresDatabaseSession`, you need to install the relevant optional dependencies:
+
+- For `IonizerServer`, include the `ionizer` extra:
+  ```bash
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[ionizer]"
+  ```
+- For `InfluxDBSession`, include the `influxdbv2` extra:
+  ```bash
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[influxdbv2]"
+  ```
+- For `PostgresDatabaseSession`, include the `postgresql` extra:
+  ```bash
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[postgresql]"
+  ```
+
+or directly add the following line to the `pyproject.toml` file:
+
+```toml
+icon-service-base = {git = "git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
+```
+
 ## Configuration
 
 Database connections rely on configurations provided either through environment variables or a specific configuration file. The package anticipates a `database_config` folder in the root directory of any module using this package. This folder should house the configuration files for the databases. Override the `database_config` folder's location by passing a different path to the database classes' constructor.
@@ -45,7 +66,7 @@ user: ...
 
 ### InfluxDBSession
 
-Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2**.
+Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2** and **requires the `influxdbv2` optional dependency**.
 
 ```python
 from icon_service_base.database import InfluxDBSession
@@ -74,7 +95,7 @@ with InfluxDBSession() as influx_client:
 
 ### PostgresDatabaseSession
 
-The `PostgresDatabaseSession` class allows interactions with a PostgreSQL database.
+The `PostgresDatabaseSession` class allows interactions with a PostgreSQL database. **This class requires the `postgresql` optional dependency**.
 
 ```python
 from icon_service_base.database import PostgresDatabaseSession
@@ -96,7 +117,7 @@ with PostgresDatabaseSession() as session:
 
 ### Ionizer Interface
 
-The `IonizerServer` provides an interface to seamlessly integrate `pydase` applications with Ionizer.
+The `IonizerServer` provides an interface to seamlessly integrate `pydase` applications with Ionizer. **This requires the `ionizer` optional dependency**.
 
 To deploy `IonizerServer` with your service:
 
