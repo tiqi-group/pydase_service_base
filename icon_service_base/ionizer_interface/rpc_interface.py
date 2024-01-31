@@ -12,20 +12,14 @@ from pydase.version import __version__
 class RPCInterface:
     """RPC interface to be passed to tiqi_rpc.Server to interface with Ionizer."""
 
-    def __init__(
-        self, service: DataService, info: dict[str, Any] = {}, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, service: DataService, *args: Any, **kwargs: Any) -> None:
         self._service = service
-        self._info = info
 
     async def version(self) -> str:
         return f"pydase v{__version__}"
 
     async def name(self) -> str:
         return self._service.__class__.__name__
-
-    async def info(self) -> dict:
-        return self._info
 
     async def get_props(self) -> dict[str, Any]:
         return self._service.serialize()
