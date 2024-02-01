@@ -1,34 +1,34 @@
-# ICON Service Base
+# `pydase` Service Base
 
-ICON Service Base is a shared code repository for Icon services in a service-based architecture. Written in Python, it provides the essential functionality for interacting with PostgreSQL and InfluxDB v2 databases. In addition, it offers the `Ionizer Interface`, enabling seamless integration between `pydase` applications and the Ionizer system.
+`pydase` Service Base is a shared code repository for `pydase` services in a service-based architecture. Written in Python, it provides the essential functionality for interacting with PostgreSQL and InfluxDB v2 databases. In addition, it offers the `Ionizer Interface`, enabling seamless integration between `pydase` applications and the Ionizer system.
 
 ## Installation
 
-Ensure you have Python 3.10 or later installed on your system. Dependencies of this package are managed with [`poetry`](https://python-poetry.org/docs/#installation). Install the `icon_service_base` as follows:
+Ensure you have Python 3.10 or later installed on your system. Dependencies of this package are managed with [`poetry`](https://python-poetry.org/docs/#installation). Install the `pydase_service_base` as follows:
 
 ```bash
-poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git
+poetry add git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/pydase_service_base.git
 ```
 
 To utilize specific functionalities such as `IonizerServer`, `InfluxDBSession`, or `PostgresDatabaseSession`, you need to install the relevant optional dependencies:
 
 - For `IonizerServer`, include the `ionizer` extra:
   ```bash
-  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[ionizer]"
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/pydase_service_base.git#main[ionizer]"
   ```
 - For `InfluxDBSession`, include the `influxdbv2` extra:
   ```bash
-  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[influxdbv2]"
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/pydase_service_base.git#main[influxdbv2]"
   ```
 - For `PostgresDatabaseSession`, include the `postgresql` extra:
   ```bash
-  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git#main[postgresql]"
+  poetry add "git+ssh://git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/pydase_service_base.git#main[postgresql]"
   ```
 
 or directly add the following line to the `pyproject.toml` file:
 
 ```toml
-icon-service-base = {git = "git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/icon_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
+pydase-service-base = {git = "git@gitlab.phys.ethz.ch:tiqi-projects/qchub/icon-services/pydase_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
 ```
 
 ## Configuration
@@ -69,7 +69,7 @@ user: ...
 Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2** and **requires the `influxdbv2` optional dependency**.
 
 ```python
-from icon_service_base.database import InfluxDBSession
+from pydase_service_base.database import InfluxDBSession
 
 with InfluxDBSession() as influx_client:
     # Creating a bucket
@@ -98,7 +98,7 @@ with InfluxDBSession() as influx_client:
 The `PostgresDatabaseSession` class allows interactions with a PostgreSQL database. **This class requires the `postgresql` optional dependency**.
 
 ```python
-from icon_service_base.database import PostgresDatabaseSession
+from pydase_service_base.database import PostgresDatabaseSession
 from your_module.models import YourModel  # replace with your model
 from sqlmodel import select
 
@@ -122,7 +122,7 @@ The `IonizerServer` provides an interface to seamlessly integrate `pydase` appli
 To deploy `IonizerServer` with your service:
 
 ```python
-from icon_service_base.ionizer_interface import IonizerServer
+from pydase_service_base.ionizer_interface import IonizerServer
 
 class YourServiceClass:
     # your implementation...

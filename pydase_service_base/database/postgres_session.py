@@ -10,7 +10,7 @@ from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
 from sqlmodel import Session, SQLModel, create_engine
 
-from icon_service_base.database.config import (
+from pydase_service_base.database.config import (
     OperationMode,
     PostgreSQLConfig,
     ServiceConfig,

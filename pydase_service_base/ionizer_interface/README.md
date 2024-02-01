@@ -7,7 +7,7 @@
 To deploy `IonizerServer` alongside your service, follow these steps:
 
 ```python
-from icon_service_base.ionizer_interface import IonizerServer
+from pydase_service_base.ionizer_interface import IonizerServer
 
 class YourServiceClass:
     # your implementation...

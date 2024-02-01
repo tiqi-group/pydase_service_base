@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "icon-service-base"
+name = "pydase-service-base"
 version = "0.1.0"
-description = "Repository storing the code that is common to all icon services."
+description = "Repository storing the code that is common to all pydase services."
 authors = ["Mose Mueller <mosmuell@ethz.ch>"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "icon_service_base" }]
+packages = [{ include = "pydase_service_base" }]
 
 [build-system]
 requires = ["poetry-core"]
@@ -80,7 +80,7 @@ max-complexity = 7
 
 
 [tool.pyright]
-include = ["icon_service_base"]
+include = ["pydase_service_base"]
 typeCheckingMode = "basic"
 
 

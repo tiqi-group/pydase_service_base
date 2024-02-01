@@ -9,7 +9,7 @@ import tiqi_rpc
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.utils.helpers import get_object_attr_from_path_list
 
-from icon_service_base.ionizer_interface.rpc_interface import RPCInterface
+from pydase_service_base.ionizer_interface.rpc_interface import RPCInterface
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +60,9 @@ class IonizerServer:
                 # internals of NumberSlider
                 full_access_path = ".".join(full_access_path.split(".")[:-1])
 
+        logger.debug(
+            "Updating Ionizer with %s", {"name": full_access_path, "value": value}
+        )
         return self.server._handler.notify(  # type: ignore
             {"name": full_access_path, "value": value}
         )
