@@ -66,6 +66,8 @@ class RPCInterface:
                 # I need to use the name attribute as this is what
                 # DataService.__set_attribute_based_on_type expects
                 value = list(current_value.__class__)[value].name
+            if isinstance(current_value, Quantity):
+                value = value * current_value.u
             elif isinstance(current_value, NumberSlider):
                 parent_path_list.append(attr_name)
                 attr_name = "value"
