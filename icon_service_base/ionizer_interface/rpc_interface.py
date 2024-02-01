@@ -22,7 +22,7 @@ class RPCInterface:
         return self._service.__class__.__name__
 
     async def get_props(self) -> dict[str, Any]:
-        return self._service.serialize()
+        return self._service.serialize()["value"]
 
     async def get_param(self, full_access_path: str) -> Any:
         """Returns the value of the parameter given by the full_access_path.
