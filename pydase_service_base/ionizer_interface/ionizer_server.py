@@ -25,7 +25,7 @@ class IonizerServer:
         self.data_service_observer = data_service_observer
         self.service = self.data_service_observer.state_manager.service
         self.server = tiqi_rpc.Server(
-            RPCInterface(self.service, **kwargs),
+            RPCInterface(self.data_service_observer, **kwargs),
             host=host,
             port=port,  # type: ignore
         )

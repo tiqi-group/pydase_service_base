@@ -4,6 +4,7 @@ from typing import Any
 
 from pydase import DataService
 from pydase.components import NumberSlider
+from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.units import Quantity
 from pydase.utils.helpers import get_object_attr_from_path_list
 from pydase.version import __version__
@@ -12,8 +13,12 @@ from pydase.version import __version__
 class RPCInterface:
     """RPC interface to be passed to tiqi_rpc.Server to interface with Ionizer."""
 
-    def __init__(self, service: DataService, *args: Any, **kwargs: Any) -> None:
-        self._service = service
+    def __init__(
+        self, data_service_observer: DataServiceObserver, *args: Any, **kwargs: Any
+    ) -> None:
+        self._data_service_observer = data_service_observer
+        self._state_manager = self._data_service_observer.state_manager
+        self._service = self._state_manager.service
 
     async def version(self) -> str:
         return f"pydase v{__version__}"
@@ -69,9 +74,9 @@ class RPCInterface:
             if isinstance(current_value, Quantity):
                 value = value * current_value.u
             elif isinstance(current_value, NumberSlider):
-                parent_path_list.append(attr_name)
-                attr_name = "value"
-        self._service.update_DataService_attribute(parent_path_list, attr_name, value)
+                full_access_path = full_access_path + "value"
+
+        self._state_manager.set_service_attribute_value_by_path(full_access_path, value)
 
     async def remote_call(self, full_access_path: str, *args: Any) -> Any:
         full_access_path_list = full_access_path.split(".")
