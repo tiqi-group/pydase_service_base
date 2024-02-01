@@ -1,6 +1,6 @@
 # Ionizer Interface
 
-`IonizerServer` is a specialized server designed to extend `pydase` applications for seamless integration with the Ionizer system. By acting as a bridge between your `pydase` service and Ionizer, this server ensures that changes or events in your service are communicated betweeen pydase and Ionizer in real-time.
+`IonizerServer` is a specialized server designed to extend `pydase` applications for seamless integration with the Ionizer system. By acting as a bridge between your `pydase` service and Ionizer, this server ensures that changes or events in your service are communicated between pydase and Ionizer in real-time.
 
 ## How to Use
 
