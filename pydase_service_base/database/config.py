@@ -26,6 +26,6 @@ class PostgreSQLConfig(BaseConfig):  # type: ignore
 
 
 class InfluxDBConfig(BaseConfig):  # type: ignore
-    url: AnyUrl
+    url: str
     org: str
     token: SecretStr
