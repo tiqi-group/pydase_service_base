@@ -64,10 +64,7 @@ def json_dumps(data: Any) -> str | list[Any]:
     result: str | list[Any]
 
     if isinstance(data, str):
-        if is_datetime_format(data):
-            result = json.dumps(data)
-        else:
-            result = data
+        result = json.dumps(data) if is_datetime_format(data) else data
     elif isinstance(data, datetime.datetime):
         result = json.dumps(str(data))
     elif isinstance(data, list):
