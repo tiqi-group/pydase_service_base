@@ -17,7 +17,7 @@ from influxdb_client.client.write.point import DEFAULT_WRITE_PRECISION
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.rest import ApiException
 
-from pydase_service_base.database.config import InfluxDBConfig
+from pydase_service_base.database.config import InfluxDBConfig, ServiceConfig
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
