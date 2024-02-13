@@ -30,10 +30,10 @@ class IonizerServer:
             port=port,  # type: ignore
         )
 
-        self.data_service_observer.add_notification_callback(self.notify_Ionizer)
+        self.data_service_observer.add_notification_callback(self.notify_ionizer)
         self.server.install_signal_handlers = lambda: None  # type: ignore
 
-    def notify_Ionizer(
+    def notify_ionizer(
         self, full_access_path: str, value: Any, cached_value: dict[str, Any]
     ) -> None:
         """This function notifies Ionizer about changed values.
