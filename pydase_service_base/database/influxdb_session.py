@@ -3,6 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, NamedTuple
 
+try:
+    from typing import Self  # type: ignore
+except ImportError:
+    from typing_extensions import Self
+
+
 from confz import FileSource
 from influxdb_client import (
     Bucket,
@@ -77,7 +83,7 @@ class InfluxDBSession:
         self._write_api: WriteApi
         self._buckets_api: BucketsApi
 
-    def __enter__(self) -> InfluxDBSession:
+    def __enter__(self) -> Self:
         self._client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
         self._write_api = self._client.write_api(write_options=SYNCHRONOUS)  # type: ignore
         return self

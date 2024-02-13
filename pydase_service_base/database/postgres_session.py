@@ -6,6 +6,11 @@ import logging
 import re
 from typing import TYPE_CHECKING, Any
 
+try:
+    from typing import Self  # type: ignore
+except ImportError:
+    from typing_extensions import Self
+
 from confz import FileSource
 from dateutil.parser import ParserError, parse  # type: ignore
 from sqlmodel import Session, SQLModel, create_engine
@@ -155,7 +160,7 @@ class PostgresDatabaseSession(Session):
             )
         )
 
-    def __enter__(self) -> PostgresDatabaseSession:
+    def __enter__(self) -> Self:
         """Begins the runtime context related to the database session."""
 
         super().__enter__()
