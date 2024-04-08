@@ -7,7 +7,16 @@ import pydase.components
 import pydase.units as u
 import tiqi_rpc
 from pydase.data_service.data_service_observer import DataServiceObserver
-from pydase.utils.helpers import get_object_attr_from_path_list
+import pydase.version
+
+if pydase.version.__major__ == 0 and pydase.version.__minor__ > 7:
+    from pydase.utils.helpers import get_object_attr_from_path
+else:
+    from pydase.utils.helpers import get_object_attr_from_path_list
+
+    def get_object_attr_from_path(target_obj: Any, path: str) -> Any:
+        return get_object_attr_from_path_list(target_obj, path.split("."))
+
 
 from pydase_service_base.ionizer_interface.rpc_interface import RPCInterface
 
@@ -52,13 +61,16 @@ class IonizerServer:
         if isinstance(value, u.Quantity):
             value = value.m
         if attr_name == "value":
-            parent_object = get_object_attr_from_path_list(
-                self.service, parent_path_list
-            )
+            parent_path = ".".join(full_access_path.split(".")[:-1])
+            parent_object = get_object_attr_from_path(self.service, parent_path)
             if isinstance(parent_object, pydase.components.NumberSlider):
                 # removes the "value" from name -> Ionizer does not know about the
                 # internals of NumberSlider
-                full_access_path = ".".join(full_access_path.split(".")[:-1])
+                full_access_path = parent_path
+            if isinstance(parent_object, pydase.components.NumberSlider):
+                # removes the "value" from name -> Ionizer does not know about the
+                # internals of NumberSlider
+                full_access_path = parent_object
 
         logger.debug(
             "Updating Ionizer with %s", {"name": full_access_path, "value": value}

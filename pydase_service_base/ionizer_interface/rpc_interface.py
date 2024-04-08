@@ -6,7 +6,17 @@ from pydase import DataService
 from pydase.components import NumberSlider
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.units import Quantity
-from pydase.utils.helpers import get_object_attr_from_path_list
+import pydase.version
+
+if pydase.version.__major__ == 0 and pydase.version.__minor__ > 7:
+    from pydase.utils.helpers import get_object_attr_from_path
+else:
+    from pydase.utils.helpers import get_object_attr_from_path_list
+
+    def get_object_attr_from_path(target_obj: Any, path: str) -> Any:
+        return get_object_attr_from_path_list(target_obj, path.split("."))
+
+
 from pydase.version import __version__
 
 
@@ -35,9 +45,7 @@ class RPCInterface:
         This method is called when Ionizer initilizes the Plugin or refreshes. The
         widgets need to store the full_access_path in their name attribute.
         """
-        param = get_object_attr_from_path_list(
-            self._service, full_access_path.split(".")
-        )
+        param = get_object_attr_from_path(self._service, full_access_path)
         if isinstance(param, NumberSlider):
             return param.value
         if isinstance(param, DataService):
@@ -54,8 +62,8 @@ class RPCInterface:
         return param
 
     async def set_param(self, full_access_path: str, value: Any) -> None:
-        parent_path_list = full_access_path.split(".")[:-1]
-        parent_object = get_object_attr_from_path_list(self._service, parent_path_list)
+        parent_path = ".".join(full_access_path.split(".")[:-1])
+        parent_object = get_object_attr_from_path(self._service, parent_path)
         attr_name = full_access_path.split(".")[-1]
         # I don't want to trigger the execution of a property getter as this might take
         # a while when connecting to remote devices
@@ -79,10 +87,7 @@ class RPCInterface:
         self._state_manager.set_service_attribute_value_by_path(full_access_path, value)
 
     async def remote_call(self, full_access_path: str, *args: Any) -> Any:
-        full_access_path_list = full_access_path.split(".")
-        method_object = get_object_attr_from_path_list(
-            self._service, full_access_path_list
-        )
+        method_object = get_object_attr_from_path(self._service, full_access_path)
         return method_object(*args)
 
     async def emit(self, message: str) -> None:
