@@ -14,7 +14,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 python = "^3.10"
 confz = "^2.0.0"
-pydase = ">=0.6.0"
+pydase = ">=0.8.0"
 
 # optional dependencies
 tiqi-rpc = { git = "ssh://git@gitlab.phys.ethz.ch/tiqi-projects/tiqi-rpc-python.git", optional = true }

@@ -6,17 +6,9 @@ from pydase import DataService
 from pydase.components import NumberSlider
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.units import Quantity
-import pydase.version
-
-if pydase.version.__major__ == 0 and pydase.version.__minor__ > 7:
-    from pydase.utils.helpers import get_object_attr_from_path
-else:
-    from pydase.utils.helpers import get_object_attr_from_path_list
-
-    def get_object_attr_from_path(target_obj: Any, path: str) -> Any:
-        return get_object_attr_from_path_list(target_obj, path.split("."))
-
-
+from pydase.utils.helpers import get_object_attr_from_path
+from pydase.utils.serialization.serializer import dump
+from pydase.utils.serialization.types import SerializedObject
 from pydase.version import __version__
 
 
@@ -36,8 +28,8 @@ class RPCInterface:
     async def name(self) -> str:
         return self._service.__class__.__name__
 
-    async def get_props(self) -> dict[str, Any]:
-        return self._service.serialize()["value"]
+    async def get_props(self) -> SerializedObject:
+        return self._service.serialize()["value"]  # type: ignore
 
     async def get_param(self, full_access_path: str) -> Any:
         """Returns the value of the parameter given by the full_access_path.
@@ -84,7 +76,9 @@ class RPCInterface:
             elif isinstance(current_value, NumberSlider):
                 full_access_path = full_access_path + "value"
 
-        self._state_manager.set_service_attribute_value_by_path(full_access_path, value)
+        self._state_manager.set_service_attribute_value_by_path(
+            full_access_path, dump(value)
+        )
 
     async def remote_call(self, full_access_path: str, *args: Any) -> Any:
         method_object = get_object_attr_from_path(self._service, full_access_path)

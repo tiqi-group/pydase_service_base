@@ -5,18 +5,11 @@ from typing import Any
 import pydase
 import pydase.components
 import pydase.units as u
+import pydase.version
 import tiqi_rpc
 from pydase.data_service.data_service_observer import DataServiceObserver
-import pydase.version
-
-if pydase.version.__major__ == 0 and pydase.version.__minor__ > 7:
-    from pydase.utils.helpers import get_object_attr_from_path
-else:
-    from pydase.utils.helpers import get_object_attr_from_path_list
-
-    def get_object_attr_from_path(target_obj: Any, path: str) -> Any:
-        return get_object_attr_from_path_list(target_obj, path.split("."))
-
+from pydase.utils.helpers import get_object_attr_from_path  # type: ignore
+from pydase.utils.serialization.types import SerializedObject
 
 from pydase_service_base.ionizer_interface.rpc_interface import RPCInterface
 
@@ -43,19 +36,19 @@ class IonizerServer:
         self.server.install_signal_handlers = lambda: None  # type: ignore
 
     def notify_ionizer(
-        self, full_access_path: str, value: Any, cached_value: dict[str, Any]
+        self, full_access_path: str, value: Any, cached_value: SerializedObject
     ) -> None:
         """This function notifies Ionizer about changed values.
 
         Args:
-        - parent_path (str): The parent path of the parameter.
-        - attr_name (str): The name of the changed parameter.
-        - value (Any): The value of the parameter.
+        full_access_path (str):
+            The full access path of the parameter.
+        value (Any):
+            The new value of the parameter.
+        cached_value (SerializedObject):
+            The serialized representation of the cached parameter.
         """
-        parent_path_list, attr_name = (
-            full_access_path.split(".")[:-1],
-            full_access_path.split(".")[-1],
-        )  # without classname
+        attr_name = full_access_path.split(".")[-1]
         if isinstance(value, Enum):
             value = value.value
         if isinstance(value, u.Quantity):
