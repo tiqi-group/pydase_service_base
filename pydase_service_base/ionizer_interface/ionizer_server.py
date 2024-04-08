@@ -67,10 +67,6 @@ class IonizerServer:
                 # removes the "value" from name -> Ionizer does not know about the
                 # internals of NumberSlider
                 full_access_path = parent_path
-            if isinstance(parent_object, pydase.components.NumberSlider):
-                # removes the "value" from name -> Ionizer does not know about the
-                # internals of NumberSlider
-                full_access_path = parent_object
 
         logger.debug(
             "Updating Ionizer with %s", {"name": full_access_path, "value": value}
