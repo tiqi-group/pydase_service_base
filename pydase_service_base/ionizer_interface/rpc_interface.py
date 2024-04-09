@@ -118,7 +118,7 @@ class RPCInterface:
                 # https://docs.python.org/3/library/enum.html#enum.EnumType.__iter__
                 # I need to use the name attribute as this is what
                 # DataService.__set_attribute_based_on_type expects
-                value = list(current_value.__class__)[value].name
+                value = list(current_value.__class__)[value]
             if isinstance(current_value, Quantity):
                 value = value * current_value.u
             elif isinstance(current_value, NumberSlider):
