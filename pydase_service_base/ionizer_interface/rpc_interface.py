@@ -8,7 +8,11 @@ from pydase import DataService
 from pydase.components import NumberSlider
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.units import Quantity
-from pydase.utils.helpers import get_object_attr_from_path
+from pydase.utils.helpers import (
+    get_object_attr_from_path,
+    get_object_by_path_parts,
+    parse_full_access_path,
+)
 from pydase.utils.serialization.serializer import (
     dump,
     generate_serialized_data_paths,
@@ -102,9 +106,9 @@ class RPCInterface:
         return param
 
     async def set_param(self, full_access_path: str, value: Any) -> None:
-        parent_path = ".".join(full_access_path.split(".")[:-1])
-        parent_object = get_object_attr_from_path(self._service, parent_path)
-        attr_name = full_access_path.split(".")[-1]
+        path_parts = parse_full_access_path(full_access_path)
+        parent_object = get_object_by_path_parts(self._service, path_parts[:-1])
+        attr_name = path_parts[-1]
         # I don't want to trigger the execution of a property getter as this might take
         # a while when connecting to remote devices
         if not isinstance(
@@ -122,7 +126,7 @@ class RPCInterface:
             if isinstance(current_value, Quantity):
                 value = value * current_value.u
             elif isinstance(current_value, NumberSlider):
-                full_access_path = full_access_path + "value"
+                full_access_path = full_access_path + ".value"
 
         self._state_manager.set_service_attribute_value_by_path(
             full_access_path, dump(value)
