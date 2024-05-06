@@ -108,25 +108,21 @@ class RPCInterface:
     async def set_param(self, full_access_path: str, value: Any) -> None:
         path_parts = parse_full_access_path(full_access_path)
         parent_object = get_object_by_path_parts(self._service, path_parts[:-1])
-        attr_name = path_parts[-1]
-        # I don't want to trigger the execution of a property getter as this might take
-        # a while when connecting to remote devices
-        if not isinstance(
-            getattr(type(parent_object), attr_name, None),
-            property,
-        ):
-            current_value = getattr(parent_object, attr_name, None)
-            if isinstance(current_value, Enum) and isinstance(value, int):
-                # Ionizer sets the enums using the position of the definition order
-                # This works as definition order is kept, see e.g.
-                # https://docs.python.org/3/library/enum.html#enum.EnumType.__iter__
-                # I need to use the name attribute as this is what
-                # DataService.__set_attribute_based_on_type expects
-                value = list(current_value.__class__)[value]
-            if isinstance(current_value, Quantity):
-                value = value * current_value.u
-            elif isinstance(current_value, NumberSlider):
-                full_access_path = full_access_path + ".value"
+
+        current_value_dict = get_nested_dict_by_path(
+            self._state_manager.cache_value, full_access_path
+        )
+        if "Enum" in current_value_dict["type"] and isinstance(value, int):
+            # Ionizer sets the enums using the position of the definition order.
+            # The following works as definition order is kept, see e.g.
+            # https://docs.python.org/3/library/enum.html#enum.EnumType.__iter__
+            current_value = get_object_by_path_parts(parent_object, [path_parts[-1]])
+            value = list(current_value.__class__)[value]
+        if current_value_dict["type"] == "Quantity":
+            current_value = get_object_by_path_parts(parent_object, [path_parts[-1]])
+            value = value * current_value.u
+        elif current_value_dict["type"] == "NumberSlider":
+            full_access_path = full_access_path + ".value"
 
         self._state_manager.set_service_attribute_value_by_path(
             full_access_path, dump(value)
