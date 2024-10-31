@@ -7,28 +7,28 @@
 Ensure you have Python 3.10 or later installed on your system. Dependencies of this package are managed with [`poetry`](https://python-poetry.org/docs/#installation). Install the `pydase_service_base` as follows:
 
 ```bash
-poetry add git+ssh://git@github.com:tiqi-group/pydase_service_base.git
+poetry add git+https://github.com/tiqi-group/pydase_service_base.git
 ```
 
 To utilize specific functionalities such as `IonizerServer`, `InfluxDBSession`, or `PostgresDatabaseSession`, you need to install the relevant optional dependencies:
 
 - For `IonizerServer`, include the `ionizer` extra:
   ```bash
-  poetry add "git+ssh://git@github.com:tiqi-group/pydase_service_base.git#main[ionizer]"
+  poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[ionizer]"
   ```
 - For `InfluxDBSession`, include the `influxdbv2` extra:
   ```bash
-  poetry add "git+ssh://git@github.com:tiqi-group/pydase_service_base.git#main[influxdbv2]"
+  poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[influxdbv2]"
   ```
 - For `PostgresDatabaseSession`, include the `postgresql` extra:
   ```bash
-  poetry add "git+ssh://git@github.com:tiqi-group/pydase_service_base.git#main[postgresql]"
+  poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[postgresql]"
   ```
 
 or directly add the following line to the `pyproject.toml` file:
 
 ```toml
-pydase-service-base = {git = "git@github.com:tiqi-group/pydase_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
+pydase-service-base = {git = "https://github.com/tiqi-group/pydase_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
 ```
 
 ## Configuration
