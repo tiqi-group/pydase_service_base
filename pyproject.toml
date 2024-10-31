@@ -34,10 +34,15 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.4.1"
 pyright = "^1.1.323"
-ruff = "^0.1.5"
+ruff = "^0.7.1"
 
 [tool.ruff]
 target-version = "py310" # Always generate Python 3.10-compatible code
+extend-exclude = [
+  "docs", "frontend"
+]
+
+[tool.ruff.lint]
 select = [
     "ASYNC", # flake8-async
     "C4",    # flake8-comprehensions
@@ -68,12 +73,8 @@ select = [
     "W",     # pycodestyle warnings
 ]
 ignore = [
-    "E203",     # whitespace-before-punctuation
-    "W292",     # missing-newline-at-end-of-file
+    "RUF006",  # asyncio-dangling-task
     "PERF203",  # try-except-in-loop
-]
-extend-exclude = [
-  "docs", "frontend"
 ]
 
 [tool.ruff.lint.mccabe]
