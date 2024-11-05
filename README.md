@@ -10,11 +10,15 @@ Ensure you have Python 3.10 or later installed on your system. Dependencies of t
 poetry add git+https://github.com/tiqi-group/pydase_service_base.git
 ```
 
-To utilize specific functionalities such as `IonizerServer`, `InfluxDBSession`, or `PostgresDatabaseSession`, you need to install the relevant optional dependencies:
+To utilize specific functionalities such as `IonizerServer`, `InfluxDBv1Session`,`InfluxDBSession`, or `PostgresDatabaseSession`, you need to install the relevant optional dependencies:
 
 - For `IonizerServer`, include the `ionizer` extra:
   ```bash
   poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[ionizer]"
+  ```
+- For `InfluxDBv1Session`, include the `influxdbv1` extra:
+  ```bash
+  poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[influxdbv1]"
   ```
 - For `InfluxDBSession`, include the `influxdbv2` extra:
   ```bash
@@ -39,12 +43,24 @@ Structure of the `database_config` folder:
 
 ```
 database_config
+├── influxdbv1_config.yaml
 ├── influxdb_config.yaml
 ├── postgres_development.yaml
 └── postgres_production.yaml
 ```
 
 Example content for the configuration files:
+
+`influxdbv1_config.yaml`:
+```yaml
+host: https://database-url.ch
+port: 8086
+username: root
+password: root
+database: my_database
+ssl: True
+verify_ssl: True
+```
 
 `influxdb_config.yaml`:
 ```yaml
@@ -63,6 +79,38 @@ user: ...
 ```
 
 ## Usage
+
+### InfluxDBv1Session
+
+Interact with an InfluxDBv1 server using the `InfluxDBv1Session` class. **Note that this class only supports InfluxDB v1** and **requires the `influxdbv1` optional dependency**.
+
+```python
+from pydase_service_base.database import InfluxDBv1Session
+
+with InfluxDBv1Session() as influx_client:
+    # Creating a database
+    influx_client.create_database(
+        dbname='my_new_database'
+    )
+
+    # Writing data to a database
+    data = [
+        {
+            "measurement": "your_measurement",  # Replace with your measurement
+            "tags": {
+                "example_tag": "tag_value",  # Replace with your tag and value
+            },
+            "fields": {
+                "example_field": 123,  # Replace with your field and its value
+            },
+            "time": "2023-06-05T00:00:00Z",  # Replace with your timestamp
+        }
+    ]
+    influx_client.write_points(data=[data, data], database="other_database")
+
+    # just write one point into the client's current database
+    influx_client.write(data=data[0])
+```
 
 ### InfluxDBSession
 

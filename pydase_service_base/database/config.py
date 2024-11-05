@@ -29,3 +29,13 @@ class InfluxDBConfig(BaseConfig):  # type: ignore
     url: str
     org: str
     token: SecretStr
+
+
+class InfluxDBv1Config(BaseConfig):  # type: ignore
+    host: str
+    port: int
+    username: str
+    password: SecretStr
+    database: str
+    ssl: bool = True
+    verify_ssl: bool = True
