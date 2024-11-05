@@ -106,7 +106,7 @@ with InfluxDBv1Session() as influx_client:
             "time": "2023-06-05T00:00:00Z",  # Replace with your timestamp
         }
     ]
-    influx_client.write_points(data=[data, data], database="other_database")
+    influx_client.write_points(data=data, database="other_database")
 
     # just write one point into the client's current database
     influx_client.write(data=data[0])
