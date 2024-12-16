@@ -25,7 +25,7 @@ except ImportError:
     class InfluxDBv1Session:  # type: ignore
         def __init__(self) -> None:
             raise OptionalDependencyError(
-                "InfluxDBSession requires the 'influxdbv2' extra. "
+                "InfluxDBv1Session requires the 'influxdbv1' extra. "
                 "Please refer to https://gitlab.phys.ethz.ch/tiqi-projects/qchub/icon-services/pydase_service_base."
             )
 
