@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydase-service-base"
-version = "0.2.0"
+version = "0.2.1"
 description = "Repository storing the code that is common to all pydase services."
 authors = ["Mose Mueller <mosmuell@ethz.ch>"]
 license = "MIT"
