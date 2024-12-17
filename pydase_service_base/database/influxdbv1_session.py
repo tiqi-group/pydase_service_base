@@ -155,20 +155,3 @@ class InfluxDBv1Session:
             batch_size=batch_size,
             consistency=consistency,
         )
-
-    def create_database(
-        self,
-        dbname: str,
-    ) -> None:
-        """Create a new database in the InfluxDB instance. This function wraps the
-        create_database from `influxdb` in a try-catch block and logs potential errors.
-
-        Args:
-            dbname:
-                The name of the database to create.
-        """
-
-        try:
-            self._client.create_database(dbname=dbname)
-        except Exception as e:
-            logger.error(e)

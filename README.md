@@ -88,11 +88,6 @@ Interact with an InfluxDBv1 server using the `InfluxDBv1Session` class. **Note t
 from pydase_service_base.database import InfluxDBv1Session
 
 with InfluxDBv1Session() as influx_client:
-    # Creating a database
-    influx_client.create_database(
-        dbname='my_new_database'
-    )
-
     # Writing data to a database
     data = [
         {
