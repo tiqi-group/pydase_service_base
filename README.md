@@ -53,13 +53,13 @@ Example content for the configuration files:
 
 `influxdbv1_config.yaml`:
 ```yaml
-host: https://database-url.ch
-port: 8086
+host: https://influxdb.phys.ethz.ch
+port: 443  # defaults to 8086 (default port of influxdb)
 username: root
 password: root
 database: my_database
-ssl: True
-verify_ssl: True
+ssl: True  # defaults to True
+verify_ssl: True  # defaults to True
 ```
 
 `influxdb_config.yaml`:
