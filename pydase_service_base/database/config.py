@@ -33,7 +33,7 @@ class InfluxDBConfig(BaseConfig):  # type: ignore
 
 class InfluxDBv1Config(BaseConfig):  # type: ignore
     host: str
-    port: int
+    port: int = 8086
     username: str
     password: SecretStr
     database: str
