@@ -88,8 +88,8 @@ Interact with an InfluxDBv1 server using the `InfluxDBv1Session` class. **Note t
 from pydase_service_base.database import InfluxDBv1Session
 
 with InfluxDBv1Session() as influx_client:
-    # Writing data to a database
-    data = [
+    # Writing points to a database
+    points = [
         {
             "measurement": "your_measurement",  # Replace with your measurement
             "tags": {
@@ -101,7 +101,7 @@ with InfluxDBv1Session() as influx_client:
             "time": "2023-06-05T00:00:00Z",  # Replace with your timestamp
         }
     ]
-    influx_client.write_points(data=data, database="other_database")
+    influx_client.write_points(points=points, database="other_database")
 ```
 
 **Note** that you have to set `ssl` and `verify_ssl` to `False` when you are using a local influxdb instance.

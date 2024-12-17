@@ -31,13 +31,8 @@ class InfluxDBv1Session:
     Example:
         ```python
         with InfluxDBv1Session() as influx_client:
-            # Creating a database
-            influx_client.create_database(
-                dbname='my_new_database'
-            )
-
             # Writing data to a database
-            data = [
+            points = [
                 {
                     "measurement": "your_measurement",  # Replace with your measurement
                     "tags": {
@@ -49,10 +44,7 @@ class InfluxDBv1Session:
                     "time": "2023-06-05T00:00:00Z",  # Replace with your timestamp
                 }
             ]
-            influx_client.write_points(data=data, database="other_database")
-
-            # just write one point into the client's current database
-            influx_client.write(data=data[0])
+            influx_client.write_points(points=points, database="other_database")
         ```
     """
 
