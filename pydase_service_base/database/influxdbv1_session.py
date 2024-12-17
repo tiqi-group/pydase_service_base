@@ -9,7 +9,7 @@ except ImportError:
     from typing_extensions import Self
 
 
-import influxdb
+import influxdb  # type: ignore
 from confz import FileSource
 
 from pydase_service_base.database.config import InfluxDBv1Config, ServiceConfig
@@ -94,35 +94,6 @@ class InfluxDBv1Session:
     ) -> None:
         self._client.close()
 
-    def write(
-        self,
-        data: dict[str, Any],
-    ) -> Any:
-        """Write data to InfluxDB.
-
-        Args:
-            data:
-                The data to be written.
-
-        Example:
-            ```python
-            >>> data = {
-                "measurement": "cpu_load_short",
-                "tags": {
-                    "host": "server01",
-                    "region": "us-west"
-                },
-                "time": "2009-11-10T23:00:00Z",
-                "fields": {
-                    "value": 0.64
-                }
-            }
-            >>> with InfluxDBv1Session() as client:
-                    client.write(data=data)
-            ```
-        """
-        self._client.write(data=data)
-
     def write_points(  # noqa: PLR0913
         self,
         points: list[dict[str, Any]],
@@ -158,19 +129,21 @@ class InfluxDBv1Session:
 
         Example:
             ```python
-            >>> data = {
-                "measurement": "cpu_load_short",
-                "tags": {
-                    "host": "server01",
-                    "region": "us-west"
-                },
-                "time": "2009-11-10T23:00:00Z",
-                "fields": {
-                    "value": 0.64
-                }
-            }
+            >>> points = [
+            ...     {
+            ...         "measurement": "cpu_load_short",
+            ...         "tags": {
+            ...             "host": "server01",
+            ...             "region": "us-west",
+            ...         },
+            ...         "time": "2009-11-10T23:00:00Z",
+            ...         "fields": {
+            ...             "value": 0.64,
+            ...         },
+            ...     }
+            ... ]
             >>> with InfluxDBv1Session() as client:
-                    client.write(data=data)
+            ...     client.write_points(points=points)
             ```
         """
 

@@ -107,9 +107,6 @@ with InfluxDBv1Session() as influx_client:
         }
     ]
     influx_client.write_points(data=data, database="other_database")
-
-    # just write one point into the client's current database
-    influx_client.write(data=data[0])
 ```
 
 ### InfluxDBSession
