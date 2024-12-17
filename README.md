@@ -104,6 +104,9 @@ with InfluxDBv1Session() as influx_client:
     influx_client.write_points(data=data, database="other_database")
 ```
 
+**Note** that you have to set `ssl` and `verify_ssl` to `False` when you are using a local influxdb instance.
+
+
 ### InfluxDBSession
 
 Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2** and **requires the `influxdbv2` optional dependency**.
