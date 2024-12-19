@@ -7,7 +7,7 @@ from typing import Any
 from pydase import DataService
 from pydase.components import NumberSlider
 from pydase.data_service.data_service_observer import DataServiceObserver
-from pydase.units import Quantity
+from pydase.units import Quantity, Unit
 from pydase.utils.helpers import (
     get_object_attr_from_path,
     get_object_by_path_parts,
@@ -91,6 +91,8 @@ class RPCInterface:
         """
         param = get_object_attr_from_path(self._service, full_access_path)
         if isinstance(param, NumberSlider):
+            if isinstance(param.value, Quantity):
+                return param.value.m
             return param.value
         if isinstance(param, DataService):
             return param.serialize()
@@ -123,6 +125,10 @@ class RPCInterface:
             value = value * current_value.u
         elif current_value_dict["type"] == "NumberSlider":
             full_access_path = full_access_path + ".value"
+            if current_value_dict["value"]["value"]["type"] == "Quantity":
+                value = value * Unit(
+                    current_value_dict["value"]["value"]["value"]["unit"]  # type: ignore
+                )
 
         self._state_manager.set_service_attribute_value_by_path(
             full_access_path, dump(value)
