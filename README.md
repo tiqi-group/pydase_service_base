@@ -32,12 +32,12 @@ To utilize specific functionalities such as `IonizerServer`, `InfluxDBv1Session`
 or directly add the following line to the `pyproject.toml` file:
 
 ```toml
-pydase-service-base = {git = "https://github.com/tiqi-group/pydase_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "ionizer"]}
+pydase_service_base = {git = "https://github.com/tiqi-group/pydase_service_base.git", rev = "main", extras = ["ionizer", "postgresql", "influxdbv1", "influxdbv2"]}
 ```
 
 ## Configuration
 
-Database connections rely on configurations provided either through environment variables or a specific configuration file. The package anticipates a `database_config` folder in the root directory of any module using this package. This folder should house the configuration files for the databases. Override the `database_config` folder's location by passing a different path to the database classes' constructor.
+Database connections rely on configurations provided by environment variables or a specific configuration file. The package anticipates a `database_config` folder in the root directory of any module using this package. This folder should house the database configuration files. You can override the `database_config` folder's location by passing a different path to the database classes' constructor.
 
 Structure of the `database_config` folder:
 
@@ -160,7 +160,7 @@ with PostgresDatabaseSession() as session:
 
 ### Ionizer Interface
 
-The `IonizerServer` provides an interface to seamlessly integrate `pydase` applications with Ionizer. **This requires the `ionizer` optional dependency**.
+The `IonizerServer` provides an interface to integrate `pydase` applications with Ionizer seamlessly. **This requires the `ionizer` optional dependency**.
 
 To deploy `IonizerServer` with your service:
 
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
 This integration ensures that your primary `pydase` server and `YourServiceClass` service are set up. It also incorporates the `IonizerServer` on port `8002`.
 
-For more details on the `IonizerServer`, refer to the [official documentation](https://pydase.readthedocs.io/en/latest/) or get in touch with the maintainers.
+For more details on the `IonizerServer`, get in touch with the maintainers.
 
 ## License
 
