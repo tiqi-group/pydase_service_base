@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import logging
+import sys
 from typing import TYPE_CHECKING, Any, NamedTuple
 
-try:
-    from typing import Self  # type: ignore
-except ImportError:
+if sys.version_info < (3, 11):
     from typing_extensions import Self
+else:
+    from typing import Self
 
 
 from confz import FileSource
-from influxdb_client import (
+from influxdb_client import (  # type: ignore
     Bucket,
     BucketRetentionRules,
     BucketsApi,
@@ -19,9 +20,9 @@ from influxdb_client import (
     WriteApi,
     WritePrecision,
 )
-from influxdb_client.client.write.point import DEFAULT_WRITE_PRECISION
-from influxdb_client.client.write_api import SYNCHRONOUS
-from influxdb_client.rest import ApiException
+from influxdb_client.client.write.point import DEFAULT_WRITE_PRECISION  # type: ignore
+from influxdb_client.client.write_api import SYNCHRONOUS  # type: ignore
+from influxdb_client.rest import ApiException  # type: ignore
 
 from pydase_service_base.database.config import InfluxDBConfig, ServiceConfig
 
