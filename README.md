@@ -60,6 +60,8 @@ password: root
 database: my_database
 ssl: True  # defaults to True
 verify_ssl: True  # defaults to True
+headers:
+  Host: other-virtual-host.ethz.ch
 ```
 
 `influxdb_config.yaml`:
@@ -67,6 +69,9 @@ verify_ssl: True  # defaults to True
 url: https://database-url.ch
 org: your-org
 token: <influxdb-token>
+verify_ssl: True  # defaults to True
+headers:
+  Host: other-virtual-host.ethz.ch
 ```
 
 `postgres_development.yaml` / `postgres_production.yaml`:
