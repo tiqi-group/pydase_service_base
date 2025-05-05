@@ -81,12 +81,15 @@ class InfluxDBSession:
         self.token = self._config.token.get_secret_value()
         self.org = self._config.org
         self.headers = self._config.headers
+        self.verify_ssl = self._config.verify_ssl
         self._client: InfluxDBClient
         self._write_api: WriteApi
         self._buckets_api: BucketsApi
 
     def __enter__(self) -> Self:
-        self._client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
+        self._client = InfluxDBClient(
+            url=self.url, token=self.token, org=self.org, verify_ssl=self.verify_ssl
+        )
 
         for header_name, header_value in self.headers.items():
             self._client.api_client.set_default_header(header_name, header_value)
