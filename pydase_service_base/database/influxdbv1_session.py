@@ -65,6 +65,7 @@ class InfluxDBv1Session:
         self._database = self._config.database
         self._ssl = self._config.ssl
         self._verify_ssl = self._config.verify_ssl
+        self._headers = self._config.headers
 
     def __enter__(self) -> Self:
         self._client = influxdb.InfluxDBClient(
@@ -75,6 +76,7 @@ class InfluxDBv1Session:
             database=self._database,
             ssl=self._ssl,
             verify_ssl=self._verify_ssl,
+            headers=self._headers,
         )
         return self
 

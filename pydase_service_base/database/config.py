@@ -29,6 +29,7 @@ class InfluxDBConfig(BaseConfig):  # type: ignore
     url: str
     org: str
     token: SecretStr
+    headers: dict[str, str] = {}  # noqa: RUF012
 
 
 class InfluxDBv1Config(BaseConfig):  # type: ignore
@@ -39,3 +40,4 @@ class InfluxDBv1Config(BaseConfig):  # type: ignore
     database: str
     ssl: bool = True
     verify_ssl: bool = True
+    headers: dict[str, str] = {}  # noqa: RUF012

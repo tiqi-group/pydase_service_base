@@ -80,12 +80,17 @@ class InfluxDBSession:
         self.url = self._config.url
         self.token = self._config.token.get_secret_value()
         self.org = self._config.org
+        self.headers = self._config.headers
         self._client: InfluxDBClient
         self._write_api: WriteApi
         self._buckets_api: BucketsApi
 
     def __enter__(self) -> Self:
         self._client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
+
+        for header_name, header_value in self.headers.items():
+            self._client.api_client.set_default_header(header_name, header_value)
+
         self._write_api = self._client.write_api(write_options=SYNCHRONOUS)  # type: ignore
         return self
 
