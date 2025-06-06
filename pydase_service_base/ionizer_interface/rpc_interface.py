@@ -62,6 +62,60 @@ def update_method_serialization(
     return serialized_object
 
 
+def flatten_obj(
+    obj: SerializedObject,
+) -> SerializedObject:
+    """Flattens container fields in the serialized representation of a service to avoid
+    nested lists and dictionaries, which are not supported by Ionizer.
+
+    Ionizer requires a flat structure where each interactive or displayable element is
+    individually addressable. This function removes intermediate container objects like
+    lists and dicts and promotes their elements to top-level entries using fully
+    qualified access paths (e.g., "my_list[0]" or "my_dict[\"key\"]").
+    """
+
+    obj_copy = copy.deepcopy(obj)
+    if obj["type"] in (
+        "DataService",
+        "Image",
+        "NumberSlider",
+        "DeviceConnection",
+        "Task",
+        "list",
+        "dict",
+    ):
+        obj_copy["value"] = flatten_obj_value(obj["value"])  # type: ignore
+
+    return obj_copy
+
+
+def flatten_obj_value(
+    obj_value: dict[str, SerializedObject],
+) -> dict[str, SerializedObject]:
+    """Recursively flattens the 'value' field of any serialized object if it contains
+    lists or dicts, making each element directly accessible by its full access path.
+
+    This flattening is necessary because Ionizer does not support nested data
+    structures. By converting structures like {"my_list": [...]}, into
+    {"my_list[0]": ..., "my_list[1]": ...}, we make the representation flat and
+    Ionizer-compatible.
+    """
+
+    flattened_obj_value: dict[str, SerializedObject] = {}
+
+    for key, value in obj_value.items():
+        if value["type"] == "list" and isinstance(value["value"], list):
+            for index, item in enumerate(value["value"]):
+                flattened_obj_value[f"{key}[{index}]"] = flatten_obj(item)
+        elif value["type"] == "dict" and isinstance(value["value"], dict):
+            for k, v in value["value"].items():
+                flattened_obj_value[f'{key}["{k}"]'] = flatten_obj(v)
+        else:
+            flattened_obj_value[key] = flatten_obj(value)
+
+    return flattened_obj_value
+
+
 class RPCInterface:
     """RPC interface to be passed to tiqi_rpc.Server to interface with Ionizer."""
 
@@ -79,8 +133,10 @@ class RPCInterface:
         return self._service.__class__.__name__
 
     async def get_props(self) -> SerializedObject:
-        return update_method_serialization(
-            copy.deepcopy(self._service.serialize()["value"])  # type: ignore
+        return flatten_obj_value(
+            update_method_serialization(
+                copy.deepcopy(self._service.serialize()["value"])  # type: ignore
+            )
         )
 
     async def get_param(self, full_access_path: str) -> Any:
