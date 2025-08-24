@@ -112,6 +112,53 @@ with InfluxDBv1Session() as influx_client:
 **Note** that you have to set `ssl` and `verify_ssl` to `False` when you are using a local influxdb instance.
 
 
+### InfluxDBv3Session
+
+Interact with an InfluxDB 3.x server using the `InfluxDBv3Session` class. **This requires the `influxdbv3` optional dependency**.
+
+#### Example configuration file (`database_config/influxdbv3_config.yaml`):
+
+```yaml
+url: http://localhost:8181
+org: test-org
+bucket: test-bucket
+token: <your-admin-token>
+verify_ssl: false
+```
+
+#### Example usage:
+
+```python
+from pydase_service_base.database.influxdbv3_session import InfluxDBv3Session, WritePrecision
+from influxdb_client_3 import Point
+import time
+
+# Option 1: Initialize from config file (recommended)
+with InfluxDBv3Session.from_config_file() as session:
+    point = Point("temperature").tag("location", "office").field("value", 23.5).time(int(time.time() * 1e9), WritePrecision.NS)
+    session.write(bucket="test-bucket", record=point)
+    # Query data (returns a pyarrow.Table)
+    table = session._client.query('SELECT * FROM "test-bucket" WHERE location = \'office\'', language="sql")
+    print(table.to_pandas())
+
+# Option 2: Initialize directly
+with InfluxDBv3Session(
+    host="http://localhost:8181",
+    org="test-org",
+    bucket="test-bucket",
+    token="<your-admin-token>",
+    verify_ssl=False,
+) as session:
+    # ... same as above ...
+    pass
+```
+
+**Note:**
+- You must create the bucket (`test-bucket`) before writing data.
+- The token must have sufficient privileges to write and query data.
+
+---
+
 ### InfluxDBSession
 
 Interact with an InfluxDB server using the `InfluxDBSession` class. **Note that this class only supports InfluxDB v2** and **requires the `influxdbv2` optional dependency**.
