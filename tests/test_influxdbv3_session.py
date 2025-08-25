@@ -109,7 +109,7 @@ def influxdb_container():
 
 
 @pytest.mark.skip(reason="Requires Docker run in background, enable when needed")
-def test_influxdbv3session_write_and_query(influxdb_container):
+def test_influxdbv3session_write(influxdb_container):
     """Test writing and querying a point using InfluxDBv3Session."""
     url = influxdb_container["url"]
     org = influxdb_container["org"]
