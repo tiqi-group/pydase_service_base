@@ -24,6 +24,10 @@ To utilize specific functionalities such as `IonizerServer`, `InfluxDBv1Session`
   ```bash
   poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[influxdbv2]"
   ```
+- For InfluxDBv3Session, include the influxdbv3 extra:
+  ```bash
+  poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[influxdbv3]"
+  ```
 - For `PostgresDatabaseSession`, include the `postgresql` extra:
   ```bash
   poetry add "git+https://github.com/tiqi-group/pydase_service_base.git#main[postgresql]"
@@ -74,6 +78,14 @@ headers:
   Host: other-virtual-host.ethz.ch
 ```
 
+```yaml
+url: https://database-url.ch
+org: your-org
+bucket: your-bucket
+token: <influxdb-token>
+verify_ssl: True
+```
+
 `postgres_development.yaml` / `postgres_production.yaml`:
 ```yaml
 database: ...
@@ -115,18 +127,6 @@ with InfluxDBv1Session() as influx_client:
 ### InfluxDBv3Session
 
 Interact with an InfluxDB 3.x server using the `InfluxDBv3Session` class. **This requires the `influxdbv3` optional dependency**.
-
-#### Example configuration file (`database_config/influxdbv3_config.yaml`):
-
-```yaml
-url: http://localhost:8181
-org: test-org
-bucket: test-bucket
-token: <your-admin-token>
-verify_ssl: false
-```
-
-#### Example usage:
 
 ```python
 from pydase_service_base.database.influxdbv3_session import InfluxDBv3Session, WritePrecision
