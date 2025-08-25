@@ -35,6 +35,7 @@ else:
                     "InfluxDBv1Session requires the 'influxdbv1' extra. "
                     "Please refer to https://gitlab.phys.ethz.ch/tiqi-projects/qchub/icon-services/pydase_service_base."
                 )
+
     try:
         import influxdb_client_3  # type: ignore # noqa
 
@@ -47,6 +48,7 @@ else:
                     "InfluxDBv3Session requires the 'influxdbv3' extra. "
                     "Please refer to https://gitlab.phys.ethz.ch/tiqi-projects/qchub/icon-services/pydase_service_base."
                 )
+
     try:
         import sqlmodel  # noqa
 
@@ -61,4 +63,9 @@ else:
                 )
 
 
-__all__ = ["InfluxDBSession", "InfluxDBv1Session", "InfluxDBv3Session", "PostgresDatabaseSession"]
+__all__ = [
+    "InfluxDBSession",
+    "InfluxDBv1Session",
+    "InfluxDBv3Session",
+    "PostgresDatabaseSession",
+]

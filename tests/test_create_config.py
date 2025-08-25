@@ -1,4 +1,3 @@
-
 import pytest
 from confz import BaseConfig, FileSource
 

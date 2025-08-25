@@ -1,4 +1,5 @@
 """Module for InfluxDB v3 session management."""
+
 from __future__ import annotations
 from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision as _WritePrecision
 from typing import Any, NamedTuple, Iterable
@@ -19,9 +20,13 @@ __all__ = [
 
 WritePrecision = _WritePrecision
 
+
 class InfluxDBv3Session:
     """Context manager for InfluxDB v3 session."""
-    def __init__(self, host: str, org: str, bucket: str, token: str, verify_ssl: bool = True):
+
+    def __init__(
+        self, host: str, org: str, bucket: str, token: str, verify_ssl: bool = True
+    ):
         """Initialize InfluxDB v3 session.
 
         Args:
@@ -37,22 +42,29 @@ class InfluxDBv3Session:
         self._host = host
         self._token = token
         self._verify_ssl = verify_ssl
-        self._client = InfluxDBClient3(self._host, self._org, self._bucket, self._token, verify_ssl=self._verify_ssl)
+        self._client = InfluxDBClient3(
+            self._host,
+            self._org,
+            self._bucket,
+            self._token,
+            verify_ssl=self._verify_ssl,
+        )
 
     def __enter__(self) -> InfluxDBv3Session:
         return self
 
     def __exit__(
-            self,
-            exc_type: type[BaseException] | None,
-            exc_value: BaseException | None,
-            exc_traceback: TracebackType | None,
-        ) -> None:
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        exc_traceback: TracebackType | None,
+    ) -> None:
         self._client.close()
 
-
-    def write(self, bucket: str,
-        record:str
+    def write(
+        self,
+        bucket: str,
+        record: str
         | Iterable[str]
         | Point
         | Iterable[Point]
@@ -62,7 +74,8 @@ class InfluxDBv3Session:
         | Iterable[bytes]
         | NamedTuple
         | Iterable[NamedTuple],
-        write_precision: WritePrecision | None = None)->None:
+        write_precision: WritePrecision | None = None,
+    ) -> None:
         """Write records to InfluxDB v3.
 
         Args:
@@ -76,7 +89,9 @@ class InfluxDBv3Session:
         self._client.write(record)
 
     @classmethod
-    def from_config_file(cls, path: str | PathLike | None = None)->"InfluxDBv3Session":
+    def from_config_file(
+        cls, path: str | PathLike | None = None
+    ) -> "InfluxDBv3Session":
         """Create InfluxDBv3Session from configuration file.
 
         Args:
@@ -94,9 +109,7 @@ class InfluxDBv3Session:
             InfluxDBv3Session: An instance of InfluxDBv3Session.
         """
         if path is not None:
-            _config = InfluxDBv3Config(
-                config_sources=FileSource(path)
-            )
+            _config = InfluxDBv3Config(config_sources=FileSource(path))
         else:
             _config = InfluxDBv3Config(
                 config_sources=FileSource(
@@ -108,5 +121,5 @@ class InfluxDBv3Session:
             org=_config.org,
             bucket=_config.bucket,
             token=_config.token.get_secret_value(),
-            verify_ssl=_config.verify_ssl
+            verify_ssl=_config.verify_ssl,
         )

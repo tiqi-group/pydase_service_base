@@ -136,8 +136,6 @@ def test_influxdbv3session_write(influxdb_container):
         assert result["value"][0].as_py() == 23.5  # type: ignore
 
 
-
-
 def test_from_config_file_initialization(influxdbv3_config_yaml):
     """
     Test that InfluxDBv3Session.from_config_file initializes correctly from config file.
