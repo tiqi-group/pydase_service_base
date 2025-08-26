@@ -1,7 +1,7 @@
 """Module for InfluxDB v3 session management."""
 
 from __future__ import annotations
-from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision as _WritePrecision
+from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision as WritePrecision
 from typing import Any, NamedTuple, Iterable
 from types import TracebackType
 import logging
@@ -17,9 +17,6 @@ __all__ = [
     "InfluxDBv3Session",
     "WritePrecision",
 ]
-
-WritePrecision = _WritePrecision
-
 
 class InfluxDBv3Session:
     """Context manager for InfluxDB v3 session."""
