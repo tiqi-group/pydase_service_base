@@ -49,6 +49,8 @@ class IonizerServer:
             The serialized representation of the cached parameter.
         """
         attr_name = full_access_path.split(".")[-1]
+        if isinstance(value, (pydase.DataService)):
+            return None
         if isinstance(value, Enum):
             value = value.value
         if isinstance(value, u.Quantity):
