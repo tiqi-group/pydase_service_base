@@ -1,4 +1,5 @@
 import logging
+from collections import abc
 from enum import Enum
 from typing import Any
 
@@ -7,7 +8,6 @@ import pydase.components
 import pydase.units as u
 import pydase.version
 import tiqi_rpc
-from callable import abc
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.utils.helpers import get_object_attr_from_path  # type: ignore
 from pydase.utils.serialization.types import SerializedObject
