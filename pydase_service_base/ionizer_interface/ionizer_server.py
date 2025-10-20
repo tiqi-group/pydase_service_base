@@ -7,6 +7,7 @@ import pydase.components
 import pydase.units as u
 import pydase.version
 import tiqi_rpc
+from callable import abc
 from pydase.data_service.data_service_observer import DataServiceObserver
 from pydase.utils.helpers import get_object_attr_from_path  # type: ignore
 from pydase.utils.serialization.types import SerializedObject
@@ -49,6 +50,12 @@ class IonizerServer:
             The serialized representation of the cached parameter.
         """
         attr_name = full_access_path.split(".")[-1]
+        if isinstance(value, abc.Iterable):
+            if any(isinstance(i, pydase.DataService) for i in value):
+                return None
+            elif len(value) == 0:
+                return None
+
         if isinstance(value, (pydase.DataService)):
             return None
         if isinstance(value, Enum):

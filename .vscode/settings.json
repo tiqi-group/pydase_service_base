@@ -4,7 +4,7 @@
     "autoDocstring.generateDocstringOnEnter": true,
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": "explicit"
     },
     "editor.rulers": [
         88
@@ -18,7 +18,7 @@
         "editor.tabSize": 4,
         "editor.detectIndentation": false,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": true
+            "source.organizeImports": "explicit"
         }
     },
     "[yaml]": {
