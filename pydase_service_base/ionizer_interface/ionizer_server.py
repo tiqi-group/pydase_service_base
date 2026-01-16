@@ -1,4 +1,5 @@
 import logging
+from collections import abc
 from enum import Enum
 from typing import Any
 
@@ -49,6 +50,14 @@ class IonizerServer:
             The serialized representation of the cached parameter.
         """
         attr_name = full_access_path.split(".")[-1]
+        if isinstance(value, abc.Iterable):
+            if any(isinstance(i, pydase.DataService) for i in value):
+                return None
+            elif len(value) == 0:
+                return None
+
+        if isinstance(value, (pydase.DataService)):
+            return None
         if isinstance(value, Enum):
             value = value.value
         if isinstance(value, u.Quantity):
