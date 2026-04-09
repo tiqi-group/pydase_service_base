@@ -5,7 +5,7 @@ from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision as WritePre
 from typing import Any, NamedTuple, Iterable
 from types import TracebackType
 import logging
-from confz import FileSource
+from confz import FileSource, EnvSource
 
 from pydase_service_base.database.config import InfluxDBv3Config
 from pydase_service_base.database.config import ServiceConfig
@@ -119,4 +119,33 @@ class InfluxDBv3Session:
             bucket=_config.bucket,
             token=_config.token.get_secret_value(),
             verify_ssl=_config.verify_ssl,
+        )
+
+    @classmethod
+    def from_env(cls, path: str | PathLike | None = None) -> "InfluxDBv3Session":
+        """Create InfluxDBv3Session from environment variables.
+        The variables should be prefixed by 'INFLUXDBV3_' and should reflect the
+        attribute names of the Influxdbv3Config class.
+
+        Examples:
+            INFLUXDBV3_URL=<influx server url>
+            INFLUXDBV3_BUCKET=bucket
+            etc...
+
+        Args:
+            path (str | PathLike | None): Path to the configuration file.
+                If None, variables are read from the environment. Otherwise,
+                variables are read from the file but environment takes precedence.
+                See https://confz.readthedocs.io/en/latest/reference/sources.html#confz.EnvSource
+                
+        Returns:
+            InfluxDBv3Session: An instance of InfluxDBv3Session.
+        """
+        config = InfluxDBv3Config(config_sources=EnvSource(file=path, allow_all=True, prefix="INFLUXDBV3_"))
+        return cls(
+            host=config.url,
+            org=config.org,
+            bucket=config.bucket,
+            token=config.token.get_secret_value(),
+            verify_ssl=config.verify_ssl,
         )
