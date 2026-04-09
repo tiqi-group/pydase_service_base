@@ -5,7 +5,7 @@ from influxdb_client_3 import InfluxDBClient3, Point, WritePrecision as WritePre
 from typing import Any, NamedTuple, Iterable
 from types import TracebackType
 import logging
-from confz import FileSource
+from confz import FileSource, EnvSource
 
 from pydase_service_base.database.config import InfluxDBv3Config
 from pydase_service_base.database.config import ServiceConfig
